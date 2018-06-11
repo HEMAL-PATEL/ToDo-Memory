@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1D1F21</color>
+    <color name="colorPrimaryDark">#151718</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="bgDefault">#1D1F21</color>
+
+    <color name="important_indicator">#F9A825</color>
+    <color name="delete">#D32F2F</color>
+    <color name="done">#09D261</color>
+</resources>
