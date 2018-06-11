@@ -2,6 +2,7 @@ package com.aar.app.todomemory.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "draft")
@@ -19,6 +20,7 @@ public class Draft {
         this("", false);
     }
 
+    @Ignore
     public Draft(String content, boolean important) {
         mContent = content;
         mImportant = important;

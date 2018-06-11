@@ -2,6 +2,7 @@ package com.aar.app.todomemory.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "todos")
@@ -24,6 +25,7 @@ public class ToDo {
         this(0, "", STATE_NONE, false);
     }
 
+    @Ignore
     public ToDo(long id, String content, int state, boolean important) {
         mId = id;
         mContent = content;

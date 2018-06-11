@@ -60,12 +60,22 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+
+        View layoutDelete;
+        View layoutDone;
+        View layoutItem;
+
         private TextView textContent;
         private ImageView imageDone;
         private View viewImportant;
 
         ViewHolder(View itemView) {
             super(itemView);
+
+            layoutDelete = itemView.findViewById(R.id.layoutDelete);
+            layoutDone = itemView.findViewById(R.id.layoutDone);
+            layoutItem = itemView.findViewById(R.id.layoutItem);
+
             textContent = itemView.findViewById(R.id.textContent);
             imageDone = itemView.findViewById(R.id.imageDone);
             viewImportant = itemView.findViewById(R.id.viewImportantIndicator);

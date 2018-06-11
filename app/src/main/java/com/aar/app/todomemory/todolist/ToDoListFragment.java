@@ -39,7 +39,7 @@ public class ToDoListFragment extends Fragment {
         RecyclerView recyclerViewToDos = view.findViewById(R.id.recyclerViewToDo);
         recyclerViewToDos.setAdapter(mToDoListAdapter);
         recyclerViewToDos.setLayoutManager(new LinearLayoutManager(getContext()));
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemSwipeCallback(getContext()) {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemSwipeCallback() {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 ToDo todo = mToDoListAdapter.at(viewHolder.getAdapterPosition());
