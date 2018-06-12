@@ -24,6 +24,7 @@
         android:text="No things to do"
         android:textColor="#7fffffff"
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment mCurrentFragment;
     private View mBottomNavigation;
+    private boolean firstRun = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,15 +24,15 @@ public class MainActivity extends AppCompatActivity {
         mBottomNavigation = findViewById(R.id.bottomButtons);
 
         goToToDoList();
+        firstRun = false;
     }
 
     @Override
     public void onBackPressed() {
         if (!(mCurrentFragment instanceof ToDoListFragment)) {
-            goToToDoList();
-        } else {
-            super.onBackPressed();
+            undimNavigationButtons();
         }
+        super.onBackPressed();
     }
 
     public void onHistoryButtonClicked(View view) {
@@ -49,30 +50,33 @@ public class MainActivity extends AppCompatActivity {
     private void goToToDoList() {
         ToDoListFragment fragment = new ToDoListFragment();
         fragment.setOnToDoClickListener(todo -> goToToDoEditor(todo.getId()));
-        replaceFragment(fragment, true);
+        replaceFragment(fragment, true, !firstRun);
     }
 
     private void goToToDoEditor(long todoId) {
         ToDoEditorFragment fragment = ToDoEditorFragment.newInstance(todoId);
-        fragment.setOnSaveSuccessfullyListener(this::goToToDoList);
-        replaceFragment(fragment, true);
+        fragment.setOnSaveSuccessfullyListener(this::onBackPressed);
+        replaceFragment(fragment, true, true);
     }
 
     private void goToHistory() {
-        replaceFragment(new HistoryFragment(), true);
+        replaceFragment(new HistoryFragment(), true, true);
     }
 
-    private void replaceFragment(Fragment fragment, boolean animate) {
+    private void replaceFragment(Fragment fragment, boolean animate, boolean addToBackStack) {
         mCurrentFragment = fragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (animate) {
             transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         }
 
-        transaction
-                .replace(R.id.container, mCurrentFragment)
-                .commit();
+        transaction.replace(R.id.container, mCurrentFragment);
 
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
         if (mCurrentFragment instanceof ToDoListFragment) {
             undimNavigationButtons();
         } else {

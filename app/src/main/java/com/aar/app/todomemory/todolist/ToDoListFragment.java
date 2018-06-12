@@ -21,7 +21,17 @@ public class ToDoListFragment extends Fragment {
     private ToDoListAdapter mToDoListAdapter = new ToDoListAdapter();
     private ToDoListViewModel mViewModel;
 
+    private RecyclerView recyclerViewToDos;
+    private TextView textEmpty;
+
     public ToDoListFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(ToDoListViewModel.class);
+
     }
 
     @Nullable
@@ -36,7 +46,7 @@ public class ToDoListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView recyclerViewToDos = view.findViewById(R.id.recyclerViewToDo);
+        recyclerViewToDos = view.findViewById(R.id.recyclerViewToDo);
         recyclerViewToDos.setAdapter(mToDoListAdapter);
         recyclerViewToDos.setLayoutManager(new LinearLayoutManager(getContext()));
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemSwipeCallback() {
@@ -54,9 +64,6 @@ public class ToDoListFragment extends Fragment {
         });
         itemTouchHelper.attachToRecyclerView(recyclerViewToDos);
 
-        TextView textEmpty = view.findViewById(R.id.textEmpty);
-
-        mViewModel = ViewModelProviders.of(this).get(ToDoListViewModel.class);
         mViewModel.getToDosLiveData().observe(this, todos -> {
             if (todos != null && !todos.isEmpty()) {
                 textEmpty.setVisibility(View.GONE);
@@ -68,6 +75,8 @@ public class ToDoListFragment extends Fragment {
                 recyclerViewToDos.setVisibility(View.GONE);
             }
         });
+
+        textEmpty = view.findViewById(R.id.textEmpty);
 
     }
 
