@@ -71,7 +71,7 @@ public class ToDoListFragment extends Fragment {
 
     }
 
-    public void setOnToDoClickListener(ToDoListAdapter.OnToDoClickListener listener) {
+    public void setOnToDoClickListener(ToDoListAdapter.OnToDoClickListener<ToDo> listener) {
         mToDoListAdapter.setOnToDoClickListener(listener);
     }
 }

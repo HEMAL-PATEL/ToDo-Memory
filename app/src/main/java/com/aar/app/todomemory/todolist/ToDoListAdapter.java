@@ -26,7 +26,7 @@ public class ToDoListAdapter extends ArrayListAdapter<ToDo, ToDoListAdapter.View
         super.onBindViewHolder(holder, position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         View layoutDelete;
         View layoutDone;
