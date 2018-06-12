@@ -34,52 +34,40 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageButton
-            android:id="@+id/buttonAdd"
-            android:layout_width="wrap_content"
+            android:id="@+id/buttonHistory"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_button"
+            android:onClick="onHistoryButtonClicked"
             android:padding="20dp"
-            android:src="@drawable/ic_add"
-            android:onClick="onAddButtonClicked"
-            app:layout_constraintEnd_toStartOf="@+id/buttonList"
+            android:src="@drawable/ic_history"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAdd"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <ImageButton
-            android:id="@+id/buttonList"
-            android:layout_width="wrap_content"
+            android:id="@+id/buttonAdd"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_button"
+            android:onClick="onAddButtonClicked"
             android:padding="20dp"
-            android:src="@drawable/ic_list"
-            android:onClick="onListButtonClicked"
-            app:layout_constraintEnd_toStartOf="@+id/buttonArchive"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buttonAdd"/>
-
-        <ImageButton
-            android:id="@+id/buttonArchive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_button"
-            android:padding="20dp"
-            android:src="@drawable/ic_save"
-            android:onClick="onArchiveButtonClicked"
+            android:src="@drawable/ic_add"
             app:layout_constraintEnd_toStartOf="@+id/buttonSettings"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buttonList"/>
+            app:layout_constraintStart_toEndOf="@+id/buttonHistory"/>
 
         <ImageButton
             android:id="@+id/buttonSettings"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_button"
+            android:onClick="onSettingsButtonClicked"
             android:padding="20dp"
             android:src="@drawable/ic_settings"
-            android:onClick="onSettingsButtonClicked"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buttonArchive"/>
+            app:layout_constraintStart_toEndOf="@+id/buttonAdd"/>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

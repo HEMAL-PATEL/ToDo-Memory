@@ -7,8 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.aar.app.todomemory.edittodo.ToDoEditorFragment;
-import com.aar.app.todomemory.model.ToDo;
-import com.aar.app.todomemory.todolist.ToDoListAdapter;
+import com.aar.app.todomemory.history.HistoryFragment;
 import com.aar.app.todomemory.todolist.ToDoListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,16 +34,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void onHistoryButtonClicked(View view) {
+        goToHistory();
+    }
+
     public void onAddButtonClicked(View view) {
         goToToDoEditor(0);
-    }
-
-    public void onListButtonClicked(View view) {
-
-    }
-
-    public void onArchiveButtonClicked(View view) {
-
     }
 
     public void onSettingsButtonClicked(View view) {
@@ -61,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
         ToDoEditorFragment fragment = ToDoEditorFragment.newInstance(todoId);
         fragment.setOnSaveSuccessfullyListener(this::goToToDoList);
         replaceFragment(fragment, true);
+    }
+
+    private void goToHistory() {
+        replaceFragment(new HistoryFragment(), true);
     }
 
     private void replaceFragment(Fragment fragment, boolean animate) {

@@ -9,4 +9,5 @@
     <color name="important_indicator">#F9A825</color>
     <color name="delete">#D32F2F</color>
     <color name="done">#09D261</color>
+    <color name="reuse">#1976D2</color>
 </resources>
