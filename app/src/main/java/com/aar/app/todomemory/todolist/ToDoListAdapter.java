@@ -11,32 +11,7 @@ import android.widget.TextView;
 import com.aar.app.todomemory.R;
 import com.aar.app.todomemory.model.ToDo;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ViewHolder> {
-
-    private List<ToDo> mData = new ArrayList<>();
-    private OnToDoClickListener mListener;
-
-    public void replaceData(List<ToDo> data) {
-        mData.clear();
-        mData.addAll(data);
-        notifyDataSetChanged();
-    }
-
-    public void removeAt(int position) {
-        mData.remove(position);
-        notifyItemRemoved(position);
-    }
-
-    public ToDo at(int position) {
-        return mData.get(position);
-    }
-
-    public void setOnToDoClickListener(OnToDoClickListener listener) {
-        mListener = listener;
-    }
+public class ToDoListAdapter extends ArrayListAdapter<ToDo, ToDoListAdapter.ViewHolder> {
 
     @NonNull
     @Override
@@ -47,16 +22,8 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(mData.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mData.size();
-    }
-
-    public interface OnToDoClickListener {
-        void onToDoClick(ToDo todo);
+        holder.bind(at(position));
+        super.onBindViewHolder(holder, position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -94,10 +61,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ViewHo
             } else {
                 imageDone.setVisibility(View.GONE);
             }
-
-            itemView.setOnClickListener(v -> {
-                if (mListener != null) mListener.onToDoClick(todo);
-            });
         }
     }
 
