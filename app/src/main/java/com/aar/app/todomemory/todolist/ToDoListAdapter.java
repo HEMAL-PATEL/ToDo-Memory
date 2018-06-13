@@ -2,6 +2,7 @@ package com.aar.app.todomemory.todolist;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,12 @@ import com.aar.app.todomemory.R;
 import com.aar.app.todomemory.model.ToDo;
 
 public class ToDoListAdapter extends ArrayListAdapter<ToDo, ToDoListAdapter.ViewHolder> {
+
+    private int mAlignment = Gravity.CENTER;
+
+    public void setItemTextAligment(int alignment) {
+        mAlignment = alignment;
+    }
 
     @NonNull
     @Override
@@ -49,6 +56,7 @@ public class ToDoListAdapter extends ArrayListAdapter<ToDo, ToDoListAdapter.View
         }
 
         void bind(ToDo todo) {
+            textContent.setGravity(mAlignment);
             textContent.setText(todo.getContent());
             if (todo.isImportant()) {
                 viewImportant.setVisibility(View.VISIBLE);

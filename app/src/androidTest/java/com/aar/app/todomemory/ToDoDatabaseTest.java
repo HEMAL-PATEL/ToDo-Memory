@@ -48,8 +48,8 @@ public class ToDoDatabaseTest {
         ToDo todo = getToDoSample();
         mToDoDao.insert(todo);
 
-        assertEquals(1, getValue(mToDoDao.getAll()).size());
-        assertEquals("content", getValue(mToDoDao.getAll()).get(0).getContent());
+        assertEquals(1, mToDoDao.getAllAsc().size());
+        assertEquals("content", mToDoDao.getAllAsc().get(0).getContent());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ToDoDatabaseTest {
         todo.setContent("changed");
         mToDoDao.update(todo);
 
-        assertEquals("changed", getValue(mToDoDao.getAll()).get(0).getContent());
+        assertEquals("changed", mToDoDao.getAllAsc().get(0).getContent());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class ToDoDatabaseTest {
 
         mToDoDao.delete(todo);
 
-        assertEquals(0, getValue(mToDoDao.getAll()).size());
+        assertEquals(0, mToDoDao.getAllAsc().size());
     }
 
     private ToDo getToDoSample() {

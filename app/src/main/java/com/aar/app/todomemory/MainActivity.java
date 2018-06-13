@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.aar.app.todomemory.edittodo.ToDoEditorFragment;
 import com.aar.app.todomemory.history.HistoryFragment;
+import com.aar.app.todomemory.settings.SettingsFragment;
 import com.aar.app.todomemory.todolist.ToDoListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSettingsButtonClicked(View view) {
-
+        goToSettings();
     }
 
     private void goToToDoList() {
@@ -61,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToHistory() {
         replaceFragment(new HistoryFragment(), true, true);
+    }
+
+    private void goToSettings() {
+        replaceFragment(new SettingsFragment(), true, true);
     }
 
     private void replaceFragment(Fragment fragment, boolean animate, boolean addToBackStack) {

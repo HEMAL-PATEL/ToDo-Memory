@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 
 import com.aar.app.todomemory.R;
 import com.aar.app.todomemory.model.ToDo;
+import com.aar.app.todomemory.settings.SettingsProvider;
+
+import java.util.ArrayList;
 
 public class ToDoListFragment extends Fragment {
 
@@ -52,13 +56,12 @@ public class ToDoListFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemSwipeCallback() {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                ToDo todo = mToDoListAdapter.at(viewHolder.getAdapterPosition());
+                int position = viewHolder.getAdapterPosition();
+                ToDo todo = mToDoListAdapter.at(position);
                 if (direction == ItemTouchHelper.LEFT) {
-                    mViewModel.delete(todo);
-                    mToDoListAdapter.removeAt(viewHolder.getAdapterPosition());
+                    mViewModel.delete(position, todo);
                 } else if (direction == ItemTouchHelper.RIGHT) {
-                    mViewModel.done(todo);
-                    mToDoListAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    mViewModel.done(position, todo);
                 }
             }
         });
@@ -69,12 +72,16 @@ public class ToDoListFragment extends Fragment {
                 textEmpty.setVisibility(View.GONE);
                 recyclerViewToDos.setVisibility(View.VISIBLE);
 
+                setTextAlignmentOnAdapter();
                 mToDoListAdapter.replaceData(todos);
             } else {
                 textEmpty.setVisibility(View.VISIBLE);
                 recyclerViewToDos.setVisibility(View.GONE);
+                mToDoListAdapter.clear();
             }
         });
+        mViewModel.getOnToDoDeleted().observe(this, mToDoListAdapter::removeAt);
+        mViewModel.getOnToDoDone().observe(this, mToDoListAdapter::notifyItemChanged);
 
         textEmpty = view.findViewById(R.id.textEmpty);
 
@@ -82,5 +89,15 @@ public class ToDoListFragment extends Fragment {
 
     public void setOnToDoClickListener(ToDoListAdapter.OnToDoClickListener<ToDo> listener) {
         mToDoListAdapter.setOnToDoClickListener(listener);
+    }
+
+    private void setTextAlignmentOnAdapter() {
+        if (mViewModel.getTodoTextAlignment() == SettingsProvider.ALIGN_LEFT) {
+            mToDoListAdapter.setItemTextAligment(Gravity.START);
+        } else if (mViewModel.getTodoTextAlignment() == SettingsProvider.ALIGN_CENTER) {
+            mToDoListAdapter.setItemTextAligment(Gravity.CENTER);
+        } else if (mViewModel.getTodoTextAlignment() == SettingsProvider.ALIGN_RIGHT) {
+            mToDoListAdapter.setItemTextAligment(Gravity.END);
+        }
     }
 }

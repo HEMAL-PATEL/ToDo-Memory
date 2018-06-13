@@ -29,6 +29,11 @@ public abstract class ArrayListAdapter<DT, VT extends RecyclerView.ViewHolder> e
         notifyItemRemoved(position);
     }
 
+    public void clear() {
+        mData.clear();
+        notifyDataSetChanged();
+    }
+
     public DT at(int position) {
         return mData.get(position);
     }

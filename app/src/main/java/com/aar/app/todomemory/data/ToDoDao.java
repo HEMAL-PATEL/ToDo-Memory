@@ -15,8 +15,11 @@ import java.util.List;
 @Dao
 public interface ToDoDao {
 
-    @Query("SELECT * FROM todos")
-    LiveData<List<ToDo>> getAll();
+    @Query("SELECT * FROM todos ORDER BY id ASC")
+    List<ToDo> getAllAsc();
+
+    @Query("SELECT * FROM todos ORDER BY id DESC")
+    List<ToDo> getAllDesc();
 
     @Query("SELECT * FROM todos WHERE id=:todoId")
     ToDo getBy(long todoId);

@@ -41,13 +41,12 @@ public class HistoryFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new HistorySwipeCallback() {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                History todo = mHistoryListAdapter.at(viewHolder.getAdapterPosition());
+                int position = viewHolder.getAdapterPosition();
+                History todo = mHistoryListAdapter.at(position);
                 if (direction == ItemTouchHelper.LEFT) {
-                    mViewModel.delete(todo);
-                    mHistoryListAdapter.removeAt(viewHolder.getAdapterPosition());
+                    mViewModel.delete(position, todo);
                 } else if (direction == ItemTouchHelper.RIGHT) {
-                    mViewModel.reuse(todo);
-                    mHistoryListAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    mViewModel.reuse(position, todo);
                 }
             }
         });
@@ -64,5 +63,7 @@ public class HistoryFragment extends Fragment {
                 recyclerViewToDos.setVisibility(View.GONE);
             }
         });
+        mViewModel.getOnHistoryReused().observe(this, mHistoryListAdapter::notifyItemChanged);
+        mViewModel.getHistoryDeleted().observe(this, mHistoryListAdapter::removeAt);
     }
 }
