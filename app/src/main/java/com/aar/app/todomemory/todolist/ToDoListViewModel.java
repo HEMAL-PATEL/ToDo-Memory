@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import com.aar.app.todomemory.SingleLiveEvent;
 import com.aar.app.todomemory.data.HistoryDao;
@@ -24,10 +25,12 @@ public class ToDoListViewModel extends AndroidViewModel {
     private HistoryDao mHistoryDao;
     private SettingsProvider mSettingsProvider;
 
+    private Pair<Integer, ToDo> mLastDeleted;
     private List<ToDo> mTodoList = new ArrayList<>();
     private MutableLiveData<List<ToDo>> mToDosLiveData = new MutableLiveData<>();
     private SingleLiveEvent<Integer> mOnToDoDeleted = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> mOnToDoDone = new SingleLiveEvent<>();
+    private SingleLiveEvent<Pair<Integer, ToDo>> mOnUndo = new SingleLiveEvent<>();
 
     public ToDoListViewModel(@NonNull Application application) {
         super(application);
@@ -39,11 +42,24 @@ public class ToDoListViewModel extends AndroidViewModel {
     public void delete(int index) {
         if (!isIndexValid(index)) return;
         ToDo todo = mTodoList.remove(index);
+        mLastDeleted = new Pair<>(index, todo);
         mToDoDao.delete(todo);
         mOnToDoDeleted.setValue(index);
 
         if (mTodoList.isEmpty()) {
             mToDosLiveData.setValue(mTodoList);
+        }
+    }
+
+    public void undo() {
+        if (mLastDeleted != null) {
+            int index = mLastDeleted.first;
+            ToDo todo = mLastDeleted.second;
+
+            mToDoDao.insert(todo);
+            mTodoList.add(index, todo);
+            mOnUndo.setValue(mLastDeleted);
+            mLastDeleted = null;
         }
     }
 
@@ -79,6 +95,10 @@ public class ToDoListViewModel extends AndroidViewModel {
 
     public SingleLiveEvent<Integer> getOnToDoDone() {
         return mOnToDoDone;
+    }
+
+    public SingleLiveEvent<Pair<Integer, ToDo>> getOnUndo() {
+        return mOnUndo;
     }
 
     private History getHistory(ToDo todo) {

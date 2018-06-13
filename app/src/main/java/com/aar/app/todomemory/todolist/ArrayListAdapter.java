@@ -24,6 +24,12 @@ public abstract class ArrayListAdapter<DT, VT extends RecyclerView.ViewHolder> e
         notifyDataSetChanged();
     }
 
+    public void insertAt(int position, DT data) {
+        if (position < 0 || position > mData.size()) return;
+        mData.add(position, data);
+        notifyItemRangeInserted(position, 1);
+    }
+
     public void removeAt(int position) {
         mData.remove(position);
         notifyItemRemoved(position);

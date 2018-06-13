@@ -4,11 +4,14 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ public class ToDoListFragment extends Fragment {
     private ToDoListAdapter mToDoListAdapter = new ToDoListAdapter();
     private ToDoListViewModel mViewModel;
 
+    private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView recyclerViewToDos;
     private TextView textEmpty;
 
@@ -51,6 +55,7 @@ public class ToDoListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mCoordinatorLayout = view.findViewById(R.id.coordinatorLayout);
         recyclerViewToDos = view.findViewById(R.id.recyclerViewToDo);
         recyclerViewToDos.setAdapter(mToDoListAdapter);
         recyclerViewToDos.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -78,8 +83,9 @@ public class ToDoListFragment extends Fragment {
                 textEmpty.setVisibility(View.VISIBLE);
             }
         });
-        mViewModel.getOnToDoDeleted().observe(this, mToDoListAdapter::removeAt);
+        mViewModel.getOnToDoDeleted().observe(this, this::onDeleted);
         mViewModel.getOnToDoDone().observe(this, mToDoListAdapter::notifyItemChanged);
+        mViewModel.getOnUndo().observe(this, this::onUndo);
 
         textEmpty = view.findViewById(R.id.textEmpty);
     }
@@ -96,5 +102,16 @@ public class ToDoListFragment extends Fragment {
         } else if (mViewModel.getTodoTextAlignment() == SettingsProvider.ALIGN_RIGHT) {
             mToDoListAdapter.setItemTextAligment(Gravity.END);
         }
+    }
+
+    private void onDeleted(int index) {
+        mToDoListAdapter.removeAt(index);
+        Snackbar.make(mCoordinatorLayout, "To-do successfully deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo", v -> mViewModel.undo())
+                .show();
+    }
+
+    private void onUndo(Pair<Integer, ToDo> undoObj) {
+        mToDoListAdapter.insertAt(undoObj.first, undoObj.second);
     }
 }
