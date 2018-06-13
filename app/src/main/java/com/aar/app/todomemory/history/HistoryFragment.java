@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aar.app.todomemory.R;
 import com.aar.app.todomemory.model.History;
@@ -62,7 +63,10 @@ public class HistoryFragment extends Fragment {
                 recyclerViewToDos.setVisibility(View.GONE);
             }
         });
-        mViewModel.getOnHistoryReused().observe(this, mHistoryListAdapter::notifyItemChanged);
+        mViewModel.getOnHistoryReused().observe(this, index -> {
+            mHistoryListAdapter.notifyItemChanged(index);
+            Toast.makeText(getContext(), "Added to to-do list", Toast.LENGTH_SHORT).show();
+        });
         mViewModel.getHistoryDeleted().observe(this, mHistoryListAdapter::removeAt);
     }
 }
