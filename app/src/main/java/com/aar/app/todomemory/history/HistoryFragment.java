@@ -35,6 +35,7 @@ public class HistoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        View textClear = view.findViewById(R.id.textClear);
         TextView emptyText = view.findViewById(R.id.textEmpty);
         RecyclerView recyclerViewToDos = view.findViewById(R.id.recyclerViewToDo);
         recyclerViewToDos.setAdapter(mHistoryListAdapter);
@@ -68,5 +69,7 @@ public class HistoryFragment extends Fragment {
             Toast.makeText(getContext(), "Added to to-do list", Toast.LENGTH_SHORT).show();
         });
         mViewModel.getHistoryDeleted().observe(this, mHistoryListAdapter::removeAt);
+
+        textClear.setOnClickListener(v -> mViewModel.clear());
     }
 }

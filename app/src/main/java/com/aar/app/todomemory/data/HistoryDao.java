@@ -21,4 +21,6 @@ public interface HistoryDao {
     @Delete
     void delete(History todo);
 
+    @Query("DELETE FROM histories")
+    void clear();
 }

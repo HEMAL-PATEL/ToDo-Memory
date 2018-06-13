@@ -50,6 +50,12 @@ public class HistoryViewModel extends AndroidViewModel {
         mOnHistoryReused.setValue(index);
     }
 
+    public void clear() {
+        mHistoryList.clear();
+        mHistoryDao.clear();
+        mHistoryLiveData.setValue(mHistoryList);
+    }
+
     public LiveData<List<History>> getToDoHistoryLiveData() {
         return mHistoryLiveData;
     }
