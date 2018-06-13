@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,11 +58,10 @@ public class ToDoListFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                ToDo todo = mToDoListAdapter.at(position);
                 if (direction == ItemTouchHelper.LEFT) {
-                    mViewModel.delete(position, todo);
+                    mViewModel.delete(position);
                 } else if (direction == ItemTouchHelper.RIGHT) {
-                    mViewModel.done(position, todo);
+                    mViewModel.done(position);
                 }
             }
         });
@@ -76,15 +76,12 @@ public class ToDoListFragment extends Fragment {
                 mToDoListAdapter.replaceData(todos);
             } else {
                 textEmpty.setVisibility(View.VISIBLE);
-                recyclerViewToDos.setVisibility(View.GONE);
-                mToDoListAdapter.clear();
             }
         });
         mViewModel.getOnToDoDeleted().observe(this, mToDoListAdapter::removeAt);
         mViewModel.getOnToDoDone().observe(this, mToDoListAdapter::notifyItemChanged);
 
         textEmpty = view.findViewById(R.id.textEmpty);
-
     }
 
     public void setOnToDoClickListener(ToDoListAdapter.OnToDoClickListener<ToDo> listener) {

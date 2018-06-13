@@ -42,11 +42,10 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                History todo = mHistoryListAdapter.at(position);
                 if (direction == ItemTouchHelper.LEFT) {
-                    mViewModel.delete(position, todo);
+                    mViewModel.delete(position);
                 } else if (direction == ItemTouchHelper.RIGHT) {
-                    mViewModel.reuse(position, todo);
+                    mViewModel.reuse(position);
                 }
             }
         });

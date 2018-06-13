@@ -14,6 +14,7 @@ import com.aar.app.todomemory.model.History;
 import com.aar.app.todomemory.model.ToDo;
 import com.aar.app.todomemory.settings.SettingsProvider;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class ToDoListViewModel extends AndroidViewModel {
     private HistoryDao mHistoryDao;
     private SettingsProvider mSettingsProvider;
 
+    private List<ToDo> mTodoList = new ArrayList<>();
     private MutableLiveData<List<ToDo>> mToDosLiveData = new MutableLiveData<>();
     private SingleLiveEvent<Integer> mOnToDoDeleted = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> mOnToDoDone = new SingleLiveEvent<>();
@@ -34,12 +36,20 @@ public class ToDoListViewModel extends AndroidViewModel {
         mSettingsProvider = SettingsProvider.getInstance(application);
     }
 
-    public void delete(int index, ToDo todo) {
+    public void delete(int index) {
+        if (!isIndexValid(index)) return;
+        ToDo todo = mTodoList.remove(index);
         mToDoDao.delete(todo);
         mOnToDoDeleted.setValue(index);
+
+        if (mTodoList.isEmpty()) {
+            mToDosLiveData.setValue(mTodoList);
+        }
     }
 
-    public void done(int index, ToDo todo) {
+    public void done(int index) {
+        if (!isIndexValid(index)) return;
+        ToDo todo = mTodoList.get(index);
         todo.setState(ToDo.STATE_DONE);
 
         if (mSettingsProvider.historyWhenDone()) {
@@ -47,8 +57,7 @@ public class ToDoListViewModel extends AndroidViewModel {
         }
 
         if (mSettingsProvider.isRemoveWhenDone()) {
-            mToDoDao.delete(todo);
-            mOnToDoDeleted.setValue(index);
+            delete(index);
         } else {
             mToDoDao.update(todo);
             mOnToDoDone.setValue(index);
@@ -83,8 +92,13 @@ public class ToDoListViewModel extends AndroidViewModel {
 
     private void updateToDoList() {
         if (mSettingsProvider.todoOrder() == SettingsProvider.ORDER_ASC)
-            mToDosLiveData.setValue(mToDoDao.getAllAsc());
+            mTodoList = mToDoDao.getAllAsc();
         else
-            mToDosLiveData.setValue(mToDoDao.getAllDesc());
+            mTodoList = mToDoDao.getAllDesc();
+        mToDosLiveData.setValue(mTodoList);
+    }
+
+    private boolean isIndexValid(int index) {
+        return index >= 0 && index < mTodoList.size();
     }
 }

@@ -35,6 +35,8 @@ public abstract class ArrayListAdapter<DT, VT extends RecyclerView.ViewHolder> e
     }
 
     public DT at(int position) {
+        if (position < 0 || position >= mData.size())
+            return null;
         return mData.get(position);
     }
 
@@ -49,7 +51,12 @@ public abstract class ArrayListAdapter<DT, VT extends RecyclerView.ViewHolder> e
     @Override
     public void onBindViewHolder(@NonNull VT holder, int position) {
         holder.itemView.setOnClickListener(v -> {
-            if (mListener != null) mListener.onToDoClick(mData.get(position));
+            if (mListener != null) {
+                DT data = at(position);
+                if (data != null) {
+                    mListener.onToDoClick(data);
+                }
+            }
         });
     }
 

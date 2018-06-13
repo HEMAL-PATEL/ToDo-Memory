@@ -31,12 +31,20 @@ public abstract class HistorySwipeCallback extends ItemTouchHelper.SimpleCallbac
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                             float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        getDefaultUIUtil().onDraw(c, recyclerView, ((HistoryListAdapter.ViewHolder) viewHolder).layoutItem, dX/2, dY, actionState, isCurrentlyActive);
+        if (Math.abs(dX) < viewHolder.itemView.getWidth()) {
+            getDefaultUIUtil().onDraw(c, recyclerView,
+                    ((HistoryListAdapter.ViewHolder) viewHolder).layoutItem,
+                    dX/2, 0, actionState, isCurrentlyActive);
+        }
     }
 
     @Override
     public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        getDefaultUIUtil().onDrawOver(c, recyclerView, ((HistoryListAdapter.ViewHolder) viewHolder).layoutItem, dX/2, dY, actionState, isCurrentlyActive);
+        if (Math.abs(dX) < viewHolder.itemView.getWidth()) {
+            getDefaultUIUtil().onDrawOver(c, recyclerView,
+                    ((HistoryListAdapter.ViewHolder) viewHolder).layoutItem,
+                    dX/2, 0, actionState, isCurrentlyActive);
+        }
     }
 
 }

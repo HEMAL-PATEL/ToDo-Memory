@@ -13,12 +13,14 @@ import com.aar.app.todomemory.data.ToDoDatabase;
 import com.aar.app.todomemory.model.History;
 import com.aar.app.todomemory.model.ToDo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryViewModel extends AndroidViewModel {
 
     private HistoryDao mHistoryDao;
     private ToDoDao mToDoDao;
+    private List<History> mHistoryList = new ArrayList<>();
 
     private MutableLiveData<List<History>> mHistoryLiveData = new MutableLiveData<>();
     private SingleLiveEvent<Integer> mHistoryDeleted = new SingleLiveEvent<>();
@@ -30,13 +32,21 @@ public class HistoryViewModel extends AndroidViewModel {
         mToDoDao = ToDoDatabase.getInstance(application).getToDoDao();
     }
 
-    public void delete(int index, History todo) {
-        mHistoryDao.delete(todo);
+    public void delete(int index) {
+        if (!isIndexValid(index)) return;
+        History history = mHistoryList.remove(index);
+        mHistoryDao.delete(history);
         mHistoryDeleted.setValue(index);
+
+        if (mHistoryList.isEmpty()) {
+            mHistoryLiveData.setValue(mHistoryList);
+        }
     }
 
-    public void reuse(int index, History todo) {
-        mToDoDao.insert(new ToDo(0, todo.getContent(), ToDo.STATE_NONE, todo.isImportant()));
+    public void reuse(int index) {
+        if (!isIndexValid(index)) return;
+        History history = mHistoryList.get(index);
+        mToDoDao.insert(new ToDo(0, history.getContent(), ToDo.STATE_NONE, history.isImportant()));
         mOnHistoryReused.setValue(index);
     }
 
@@ -54,6 +64,11 @@ public class HistoryViewModel extends AndroidViewModel {
     }
 
     private void updateHistoryList() {
-        mHistoryLiveData.setValue(mHistoryDao.getAll());
+        mHistoryList = mHistoryDao.getAll();
+        mHistoryLiveData.setValue(mHistoryList);
+    }
+
+    private boolean isIndexValid(int index) {
+        return index >= 0 && index < mHistoryList.size();
     }
 }

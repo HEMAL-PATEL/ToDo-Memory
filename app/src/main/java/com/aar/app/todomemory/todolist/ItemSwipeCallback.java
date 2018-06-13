@@ -3,6 +3,7 @@ package com.aar.app.todomemory.todolist;
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 
 import com.aar.app.todomemory.model.ToDo;
 
@@ -42,12 +43,16 @@ public abstract class ItemSwipeCallback extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                             float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        getDefaultUIUtil().onDraw(c, recyclerView, ((ToDoListAdapter.ViewHolder) viewHolder).layoutItem, dX/2, dY, actionState, isCurrentlyActive);
+        if (Math.abs(dX) < viewHolder.itemView.getWidth()) {
+            getDefaultUIUtil().onDraw(c, recyclerView, ((ToDoListAdapter.ViewHolder) viewHolder).layoutItem, dX/2, 0, actionState, isCurrentlyActive);
+        }
     }
 
     @Override
     public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        getDefaultUIUtil().onDrawOver(c, recyclerView, ((ToDoListAdapter.ViewHolder) viewHolder).layoutItem, dX/2, dY, actionState, isCurrentlyActive);
+        if (Math.abs(dX) < viewHolder.itemView.getWidth()) {
+            getDefaultUIUtil().onDrawOver(c, recyclerView, ((ToDoListAdapter.ViewHolder) viewHolder).layoutItem, dX/2, 0, actionState, isCurrentlyActive);
+        }
     }
 
 }
