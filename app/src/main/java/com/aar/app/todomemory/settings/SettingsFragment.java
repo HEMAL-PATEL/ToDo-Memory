@@ -1,6 +1,7 @@
 package com.aar.app.todomemory.settings;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,11 @@ public class SettingsFragment extends Fragment {
 
     private HelpFragment mHelpFragment;
     private SettingsViewModel mViewModel;
+    private OnThemeChanged mOnThemeChanged;
+
+    public interface OnThemeChanged {
+        void onThemeChanged(int themeRes);
+    }
 
     public SettingsFragment() {
     }
@@ -48,6 +54,8 @@ public class SettingsFragment extends Fragment {
         View orderDesc = view.findViewById(R.id.orderDesc);
         View btnRateApp = view.findViewById(R.id.btnRateApp);
         View btnHelp = view.findViewById(R.id.btnHelp);
+        View themeDark = view.findViewById(R.id.textThemeDark);
+        View themeLight = view.findViewById(R.id.textThemeLight);
 
         switchRemove.setOnCheckedChangeListener((buttonView, isChecked) -> mViewModel.setRemoveWhenDone(isChecked));
         switchHistory.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setHistoryWhenDone(isChecked)));
@@ -59,6 +67,8 @@ public class SettingsFragment extends Fragment {
         orderDesc.setOnClickListener(v -> mViewModel.setTodoOrder(SettingsProvider.ORDER_DESC));
         btnRateApp.setOnClickListener(this::onRateAppClick);
         btnHelp.setOnClickListener(this::onHelpClick);
+        themeDark.setOnClickListener(v -> mViewModel.setTheme(SettingsProvider.THEME_DARK));
+        themeLight.setOnClickListener(v -> mViewModel.setTheme(SettingsProvider.THEME_LIGHT));
 
         mViewModel.getRemoveWhenDone().observe(this, enable -> switchRemove.setChecked(enable == null ? false : enable));
         mViewModel.getHistoryWhenDone().observe(this, enable -> switchHistory.setChecked(enable == null ? false : enable));
@@ -67,16 +77,25 @@ public class SettingsFragment extends Fragment {
             alignLeft.setBackgroundColor(Color.TRANSPARENT);
             alignCenter.setBackgroundColor(Color.TRANSPARENT);
             alignRight.setBackgroundColor(Color.TRANSPARENT);
-            if (alignment == SettingsProvider.ALIGN_LEFT) alignLeft.setBackgroundColor(Color.DKGRAY);
-            else if (alignment == SettingsProvider.ALIGN_CENTER) alignCenter.setBackgroundColor(Color.DKGRAY);
-            else if (alignment == SettingsProvider.ALIGN_RIGHT) alignRight.setBackgroundColor(Color.DKGRAY);
+            int highlightColor = getColorHighlightFromTheme();
+            if (alignment == SettingsProvider.ALIGN_LEFT) alignLeft.setBackgroundColor(highlightColor);
+            else if (alignment == SettingsProvider.ALIGN_CENTER) alignCenter.setBackgroundColor(highlightColor);
+            else if (alignment == SettingsProvider.ALIGN_RIGHT) alignRight.setBackgroundColor(highlightColor);
         });
         mViewModel.getTodoOrder().observe(this, order -> {
             orderAsc.setBackgroundColor(Color.TRANSPARENT);
             orderDesc.setBackgroundColor(Color.TRANSPARENT);
-            if (order == SettingsProvider.ORDER_ASC) orderAsc.setBackgroundColor(Color.DKGRAY);
-            else if (order == SettingsProvider.ORDER_DESC) orderDesc.setBackgroundColor(Color.DKGRAY);
+            int highlightColor = getColorHighlightFromTheme();
+            if (order == SettingsProvider.ORDER_ASC) orderAsc.setBackgroundColor(highlightColor);
+            else if (order == SettingsProvider.ORDER_DESC) orderDesc.setBackgroundColor(highlightColor);
         });
+        mViewModel.getOnThemeChanged().observe(this, theme -> {
+            if (mOnThemeChanged != null) mOnThemeChanged.onThemeChanged(theme);
+        });
+    }
+
+    public void setOnThemeChanged(OnThemeChanged listener) {
+        mOnThemeChanged = listener;
     }
 
     private void onRateAppClick(View v) {
@@ -95,5 +114,12 @@ public class SettingsFragment extends Fragment {
                     .commit();
             mHelpFragment = null;
         }
+    }
+
+    private int getColorHighlightFromTheme() {
+        TypedArray a = getActivity().getTheme().obtainStyledAttributes(new int[]{R.attr.settingsSelectHighlight});
+        int color = a.getColor(0, Color.WHITE);
+        a.recycle();
+        return color;
     }
 }

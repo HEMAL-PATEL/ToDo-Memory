@@ -3,11 +3,35 @@
     <color name="colorPrimary">#1D1F21</color>
     <color name="colorPrimaryDark">#151718</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="navigationBar">#20000000</color>
+    <color name="navigationBarTopDivider">#64ffffff</color>
+    <color name="primaryText">#ffffff</color>
+    <color name="secondaryText">#c7c7c7</color>
+    <color name="background">#1D1F21</color>
+    <color name="importantIndicator">#F9A825</color>
+    <color name="deleteBackground">#D32F2F</color>
+    <color name="doneBackground">#09D261</color>
+    <color name="reuseBackground">#1976D2</color>
+    <color name="editorSaveForeground">#7e7e7e</color>
+    <color name="listItemDivider">#19ffffff</color>
+    <color name="itemSecondaryText">#fff</color>
+    <color name="settingsHeaderBackground">#26ffffff</color>
 
-    <color name="bgDefault">#1D1F21</color>
-
-    <color name="important_indicator">#F9A825</color>
-    <color name="delete">#D32F2F</color>
-    <color name="done">#09D261</color>
-    <color name="reuse">#1976D2</color>
+    <color name="light_colorPrimary">#FAFAFA</color>
+    <color name="light_colorPrimaryDark">#EEEEEE</color>
+    <color name="light_colorAccent">#FF4081</color>
+    <color name="light_navigationBar">#e1e1e1</color>
+    <color name="light_navigationBarTopDivider">#5c8e8e8e</color>
+    <color name="light_primaryText">#424242</color>
+    <color name="light_secondaryText">#757575</color>
+    <color name="light_background">#EEEEEE</color>
+    <color name="light_importantIndicator">#F9A825</color>
+    <color name="light_deleteBackground">#D32F2F</color>
+    <color name="light_doneBackground">#09D261</color>
+    <color name="light_reuseBackground">#1976D2</color>
+    <color name="light_editorSaveForeground">#a1a1a1</color>
+    <color name="light_listItemDivider">#49818181</color>
+    <color name="light_itemSecondaryText">#fff</color>
+    <color name="light_settingsHeaderBackground">#32000000</color>
+    <color name="light_highlight">#ffffff</color>
 </resources>

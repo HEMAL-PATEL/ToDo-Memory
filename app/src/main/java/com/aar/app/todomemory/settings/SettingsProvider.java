@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
+import com.aar.app.todomemory.R;
+
 public class SettingsProvider {
 
     private static SettingsProvider INSTANCE = null;
@@ -22,6 +24,7 @@ public class SettingsProvider {
     private static final String KEY_RUN_WHEN_TURN_ON = "run_when_turn_on";
     private static final String KEY_TEXT_ALIGN = "text_align";
     private static final String KEY_ORDER = "order";
+    private static final String KEY_THEME = "theme";
 
     private SharedPreferences mPref;
 
@@ -31,6 +34,9 @@ public class SettingsProvider {
 
     public static final int ORDER_ASC = 0;
     public static final int ORDER_DESC = 1;
+
+    public static final int THEME_DARK = R.style.AppTheme;
+    public static final int THEME_LIGHT = R.style.AppTheme_Light;
 
     private SettingsProvider(@NonNull Application application) {
         mPref = application.getSharedPreferences("todo_memory", Context.MODE_PRIVATE);
@@ -83,6 +89,16 @@ public class SettingsProvider {
     public void setTodoOrder(int order) {
         mPref.edit()
                 .putInt(KEY_ORDER, order)
+                .apply();
+    }
+
+    public int theme() {
+        return mPref.getInt(KEY_THEME, THEME_DARK);
+    }
+
+    public void setTheme(int theme) {
+        mPref.edit()
+                .putInt(KEY_THEME, theme)
                 .apply();
     }
 }

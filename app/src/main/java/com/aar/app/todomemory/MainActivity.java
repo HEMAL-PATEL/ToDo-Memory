@@ -9,6 +9,7 @@ import android.view.View;
 import com.aar.app.todomemory.edittodo.ToDoEditorFragment;
 import com.aar.app.todomemory.history.HistoryFragment;
 import com.aar.app.todomemory.settings.SettingsFragment;
+import com.aar.app.todomemory.settings.SettingsProvider;
 import com.aar.app.todomemory.todolist.ToDoListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        int themeRes = SettingsProvider.getInstance(getApplication()).theme();
+        setTheme(themeRes);
+
         setContentView(R.layout.activity_main);
 
         mBottomNavigation = findViewById(R.id.bottomButtons);
@@ -65,7 +70,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToSettings() {
-        replaceFragment(new SettingsFragment(), true, true);
+        SettingsFragment fragment = new SettingsFragment();
+        fragment.setOnThemeChanged(themeRes -> {
+            recreate();
+        });
+        replaceFragment(fragment, true, true);
     }
 
     private void replaceFragment(Fragment fragment, boolean animate, boolean addToBackStack) {
@@ -94,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void showNavigationButtons() {
         mBottomNavigation.setVisibility(View.VISIBLE);
+    }
+
+    private void updateTheme() {
+
     }
 
 }

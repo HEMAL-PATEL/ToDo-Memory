@@ -10,7 +10,7 @@
         android:id="@+id/layoutDelete"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/delete"
+        android:background="?attr/deleteBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -27,6 +27,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:src="@drawable/ic_delete"
+            android:tint="?attr/itemSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -38,7 +39,7 @@
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
             android:text="Delete"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/itemSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -48,7 +49,7 @@
         android:id="@+id/layoutDone"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/done"
+        android:background="?attr/doneBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/layoutDelete"
         app:layout_constraintHorizontal_bias="0.5"
@@ -65,6 +66,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:src="@drawable/ic_done"
+            android:tint="?attr/itemSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -76,7 +78,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="Done"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/itemSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -86,7 +88,7 @@
         android:id="@+id/layoutItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_todo_item"
+        android:background="?attr/listItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +98,7 @@
             android:id="@+id/viewImportantIndicator"
             android:layout_width="2dp"
             android:layout_height="0dp"
-            android:background="@color/important_indicator"
+            android:background="?attr/importantIndicator"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -104,7 +106,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#19ffffff"
+            android:background="?attr/listItemDivider"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -120,10 +122,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:gravity="center"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/primaryText"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageCancelled"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageDone"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="TextView"/>
@@ -135,23 +137,11 @@
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:src="@drawable/ic_done"
-            android:tint="@color/done"
+            android:tint="?attr/doneBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <ImageView
-            android:id="@+id/imageCancelled"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/ic_cancel"
-            android:tint="#40ffffff"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

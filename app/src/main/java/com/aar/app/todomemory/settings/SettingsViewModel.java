@@ -5,6 +5,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.aar.app.todomemory.SingleLiveEvent;
+
 public class SettingsViewModel extends AndroidViewModel {
 
     private SettingsProvider mSettingsProvider;
@@ -14,6 +16,7 @@ public class SettingsViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> mRunWhenTurnOn = new MutableLiveData<>();
     private MutableLiveData<Integer> mTextAlignment = new MutableLiveData<>();
     private MutableLiveData<Integer> mTodoOrder = new MutableLiveData<>();
+    private SingleLiveEvent<Integer> mOnThemeChanged = new SingleLiveEvent<>();
 
     public SettingsViewModel(@NonNull Application application) {
         super(application);
@@ -51,6 +54,13 @@ public class SettingsViewModel extends AndroidViewModel {
         mSettingsProvider.setTodoOrder(order);
     }
 
+    public void setTheme(int theme) {
+        if (mSettingsProvider.theme() != theme) {
+            mSettingsProvider.setTheme(theme);
+            mOnThemeChanged.setValue(theme);
+        }
+    }
+
     public MutableLiveData<Boolean> getRemoveWhenDone() {
         return mRemoveWhenDone;
     }
@@ -69,5 +79,9 @@ public class SettingsViewModel extends AndroidViewModel {
 
     public MutableLiveData<Integer> getTodoOrder() {
         return mTodoOrder;
+    }
+
+    public MutableLiveData<Integer> getOnThemeChanged() {
+        return mOnThemeChanged;
     }
 }

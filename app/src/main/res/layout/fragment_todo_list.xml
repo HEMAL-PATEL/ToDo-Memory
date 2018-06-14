@@ -5,7 +5,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgDefault"
+    android:background="?attr/background"
     tools:context=".todolist.ToDoListFragment">
 
     <android.support.v7.widget.RecyclerView
@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="No things to do"
-        android:textColor="#7fffffff"
+        android:textColor="?attr/secondaryText"
         android:textSize="16sp"
         android:visibility="gone"/>
 

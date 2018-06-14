@@ -1,12 +1,54 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/bgDefault</item>
+        <item name="primaryText">@color/primaryText</item>
+        <item name="navigationBar">@color/navigationBar</item>
+        <item name="navigationBarTopDivider">@color/navigationBarTopDivider</item>
+        <item name="navigationButtonBackground">@drawable/bg_button</item>
+        <item name="secondaryText">@color/secondaryText</item>
+        <item name="background">@color/background</item>
+        <item name="importantIndicator">@color/importantIndicator</item>
+        <item name="deleteBackground">@color/deleteBackground</item>
+        <item name="doneBackground">@color/doneBackground</item>
+        <item name="reuseBackground">@color/reuseBackground</item>
+        <item name="editorBackground">@drawable/bg_edit_text</item>
+        <item name="editorForeground">@android:color/darker_gray</item>
+        <item name="editorSaveBackground">@drawable/bg_button_light</item>
+        <item name="editorSaveForeground">@color/editorSaveForeground</item>
+        <item name="listItemBackground">@drawable/bg_todo_item</item>
+        <item name="listItemDivider">@color/listItemDivider</item>
+        <item name="itemSecondaryText">@color/itemSecondaryText</item>
+        <item name="settingsHeaderBackground">@color/settingsHeaderBackground</item>
+        <item name="settingsSelectHighlight">@android:color/darker_gray</item>
+    </style>
+
+
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/light_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/light_colorPrimaryDark</item>
+        <item name="colorAccent">@color/light_colorAccent</item>
+        <item name="primaryText">@color/light_primaryText</item>
+        <item name="navigationBar">@color/light_navigationBar</item>
+        <item name="navigationBarTopDivider">@color/light_navigationBarTopDivider</item>
+        <item name="navigationButtonBackground">@drawable/bg_button</item>
+        <item name="secondaryText">@color/light_secondaryText</item>
+        <item name="background">@color/light_background</item>
+        <item name="importantIndicator">@color/light_importantIndicator</item>
+        <item name="deleteBackground">@color/light_deleteBackground</item>
+        <item name="doneBackground">@color/light_doneBackground</item>
+        <item name="reuseBackground">@color/light_reuseBackground</item>
+        <item name="editorBackground">@drawable/bg_edit_text</item>
+        <item name="editorForeground">@android:color/darker_gray</item>
+        <item name="editorSaveBackground">@drawable/bg_button_light</item>
+        <item name="editorSaveForeground">@color/light_editorSaveForeground</item>
+        <item name="listItemBackground">@drawable/light_bg_todo_item</item>
+        <item name="listItemDivider">@color/light_listItemDivider</item>
+        <item name="itemSecondaryText">@color/light_itemSecondaryText</item>
+        <item name="settingsHeaderBackground">@color/light_settingsHeaderBackground</item>
+        <item name="settingsSelectHighlight">@color/light_highlight</item>
     </style>
 
 </resources>

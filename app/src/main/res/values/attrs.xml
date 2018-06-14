@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="navigationBar" format="reference"/>
+    <attr name="navigationBarTopDivider" format="reference"/>
+    <attr name="navigationButtonBackground" format="reference"/>
+    <attr name="primaryText" format="reference"/>
+    <attr name="secondaryText" format="reference"/>
+    <attr name="background" format="reference"/>
+    <attr name="importantIndicator" format="reference"/>
+    <attr name="deleteBackground" format="reference"/>
+    <attr name="doneBackground" format="reference"/>
+    <attr name="reuseBackground" format="reference"/>
+
+    <attr name="editorBackground" format="reference"/>
+    <attr name="editorForeground" format="reference"/>
+    <attr name="editorSaveBackground" format="reference"/>
+    <attr name="editorSaveForeground" format="reference"/>
+
+    <attr name="listItemBackground" format="reference"/>
+    <attr name="listItemDivider" format="reference"/>
+    <attr name="itemSecondaryText" format="reference"/>
+
+    <attr name="settingsHeaderBackground" format="reference"/>
+    <attr name="settingsSelectHighlight" format="reference"/>
+</resources>

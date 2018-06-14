@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgDefault">
+    android:background="?attr/background">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -16,7 +16,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_edit_text"
+        android:background="?attr/editorBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -45,11 +45,11 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/bg_button_light"
+            android:background="?attr/editorSaveBackground"
             android:minWidth="60dp"
             android:padding="4dp"
             android:src="@drawable/ic_check"
-            android:tint="#7e7e7e"
+            android:tint="?attr/editorSaveForeground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextTodo"/>
@@ -65,7 +65,7 @@
             android:button="@drawable/bg_checkbox"
             android:padding="4dp"
             android:text="Important"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="?attr/editorForeground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextTodo"/>
@@ -80,7 +80,7 @@
             android:layout_marginTop="8dp"
             android:padding="4dp"
             android:src="@drawable/ic_clear"
-            android:tint="#c7c7c7"
+            android:tint="?attr/editorForeground"
             android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/buttonSave"
@@ -97,7 +97,7 @@
             android:button="@drawable/bg_checkbox_done"
             android:padding="4dp"
             android:text="Done"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="?attr/editorForeground"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/checkImportant"
@@ -112,7 +112,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="#96ffffff"
+        android:textColor="?attr/secondaryText"
         android:textSize="12sp"
         tools:text="New to-do"
         app:layout_constraintStart_toStartOf="parent"
