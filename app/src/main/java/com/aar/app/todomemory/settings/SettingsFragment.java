@@ -1,6 +1,8 @@
 package com.aar.app.todomemory.settings;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aar.app.todomemory.PhoneScreenService;
 import com.aar.app.todomemory.R;
 import com.aar.app.todomemory.Utils;
 
@@ -47,6 +50,7 @@ public class SettingsFragment extends Fragment {
         SwitchCompat switchRemove = view.findViewById(R.id.switchRemove);
         SwitchCompat switchHistory = view.findViewById(R.id.switchHistory);
         SwitchCompat switchRunTurnOn = view.findViewById(R.id.switchRunTurnOn);
+        SwitchCompat switchRunOnly = view.findViewById(R.id.switchRunOnly);
         View alignLeft = view.findViewById(R.id.alignLeft);
         View alignCenter = view.findViewById(R.id.alignCenter);
         View alignRight = view.findViewById(R.id.alignRight);
@@ -60,6 +64,7 @@ public class SettingsFragment extends Fragment {
         switchRemove.setOnCheckedChangeListener((buttonView, isChecked) -> mViewModel.setRemoveWhenDone(isChecked));
         switchHistory.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setHistoryWhenDone(isChecked)));
         switchRunTurnOn.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setRunWhenTurnOn(isChecked)));
+        switchRunOnly.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setRunOnlyWhenToDoExist(isChecked)));
         alignLeft.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_LEFT));
         alignCenter.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_CENTER));
         alignRight.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_RIGHT));
@@ -72,7 +77,16 @@ public class SettingsFragment extends Fragment {
 
         mViewModel.getRemoveWhenDone().observe(this, enable -> switchRemove.setChecked(enable == null ? false : enable));
         mViewModel.getHistoryWhenDone().observe(this, enable -> switchHistory.setChecked(enable == null ? false : enable));
-        mViewModel.getRunWhenTurnOn().observe(this, enable -> switchRunTurnOn.setChecked(enable == null ? false : enable));
+        mViewModel.getRunWhenTurnOn().observe(this, enable -> {
+            enable = enable == null ? false : enable;
+            switchRunTurnOn.setChecked(enable);
+            if (enable) {
+                Utils.startPhoneScreenEventService(getActivity());
+            } else {
+                Utils.stopPhoneScreenEventService(getActivity());
+            }
+        });
+        mViewModel.getRunOnlyWhenToDoExist().observe(this, enable -> switchRunOnly.setChecked(enable == null ? false : enable));
         mViewModel.getTextAlignment().observe(this, alignment -> {
             alignLeft.setBackgroundColor(Color.TRANSPARENT);
             alignCenter.setBackgroundColor(Color.TRANSPARENT);

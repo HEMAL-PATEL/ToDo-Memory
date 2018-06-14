@@ -112,6 +112,7 @@ public class ToDoListFragment extends Fragment {
     }
 
     private void onUndo(Pair<Integer, ToDo> undoObj) {
+        textEmpty.setVisibility(View.GONE);
         mToDoListAdapter.insertAt(undoObj.first, undoObj.second);
     }
 }

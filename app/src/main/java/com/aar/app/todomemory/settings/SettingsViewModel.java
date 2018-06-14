@@ -14,6 +14,7 @@ public class SettingsViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> mRemoveWhenDone = new MutableLiveData<>();
     private MutableLiveData<Boolean> mHistoryWhenDone = new MutableLiveData<>();
     private MutableLiveData<Boolean> mRunWhenTurnOn = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mRunOnlyWhenToDoExist = new MutableLiveData<>();
     private MutableLiveData<Integer> mTextAlignment = new MutableLiveData<>();
     private MutableLiveData<Integer> mTodoOrder = new MutableLiveData<>();
     private SingleLiveEvent<Integer> mOnThemeChanged = new SingleLiveEvent<>();
@@ -25,6 +26,7 @@ public class SettingsViewModel extends AndroidViewModel {
         mRemoveWhenDone.setValue(mSettingsProvider.isRemoveWhenDone());
         mHistoryWhenDone.setValue(mSettingsProvider.historyWhenDone());
         mRunWhenTurnOn.setValue(mSettingsProvider.runWhenTurnOn());
+        mRunOnlyWhenToDoExist.setValue(mSettingsProvider.runOnlyWhenToDoExist());
         mTextAlignment.setValue(mSettingsProvider.textAlignment());
         mTodoOrder.setValue(mSettingsProvider.todoOrder());
     }
@@ -40,8 +42,19 @@ public class SettingsViewModel extends AndroidViewModel {
     }
 
     public void setRunWhenTurnOn(boolean enable) {
+        if (!enable) {
+            mSettingsProvider.setRunOnlyWhenToDoExist(false);
+            mRunOnlyWhenToDoExist.setValue(false);
+        }
         mRunWhenTurnOn.setValue(enable);
         mSettingsProvider.setRunWhenTurnOn(enable);
+    }
+
+    public void setRunOnlyWhenToDoExist(boolean enable) {
+        if (mSettingsProvider.runWhenTurnOn()) {
+            mRunOnlyWhenToDoExist.setValue(enable);
+            mSettingsProvider.setRunOnlyWhenToDoExist(enable);
+        }
     }
 
     public void setTextAlignment(int alignment) {
@@ -71,6 +84,10 @@ public class SettingsViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> getRunWhenTurnOn() {
         return mRunWhenTurnOn;
+    }
+
+    public MutableLiveData<Boolean> getRunOnlyWhenToDoExist() {
+        return mRunOnlyWhenToDoExist;
     }
 
     public MutableLiveData<Integer> getTextAlignment() {

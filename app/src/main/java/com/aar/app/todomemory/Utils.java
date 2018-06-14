@@ -1,9 +1,12 @@
 package com.aar.app.todomemory;
 
+import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+
+import java.util.List;
 
 public class Utils {
 
@@ -20,4 +23,13 @@ public class Utils {
         }
     }
 
+    public static void startPhoneScreenEventService(Context context) {
+        Intent i = new Intent(context, PhoneScreenService.class);
+        context.startService(i);
+    }
+
+    public static void stopPhoneScreenEventService(Context context) {
+        Intent i = new Intent(context, PhoneScreenService.class);
+        context.stopService(i);
+    }
 }
