@@ -19,6 +19,8 @@ import com.aar.app.todomemory.model.ToDo;
 
 public class ToDoEditorFragment extends Fragment {
 
+    private static final String KEY_TODO_ID = "todo_id";
+
     private EditText mToDo;
     private CheckBox mImportant;
     private CheckBox mIsDone;
@@ -31,7 +33,7 @@ public class ToDoEditorFragment extends Fragment {
 
     public static ToDoEditorFragment newInstance(long todoId) {
         Bundle args = new Bundle();
-        args.putLong("KEY_TODO_ID", todoId);
+        args.putLong(KEY_TODO_ID, todoId);
         ToDoEditorFragment fragment = new ToDoEditorFragment();
         fragment.setArguments(args);
         return fragment;
@@ -131,6 +133,6 @@ public class ToDoEditorFragment extends Fragment {
 
     private long getToDoId() {
         if (getArguments() == null) return 0;
-        return getArguments().getLong("KEY_TODO_ID");
+        return getArguments().getLong(KEY_TODO_ID);
     }
 }
