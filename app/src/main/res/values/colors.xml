@@ -18,7 +18,7 @@
     <color name="settingsHeaderBackground">#26ffffff</color>
 
     <color name="light_colorPrimary">#FAFAFA</color>
-    <color name="light_colorPrimaryDark">#EEEEEE</color>
+    <color name="light_colorPrimaryDark">#BDBDBD</color>
     <color name="light_colorAccent">#FF4081</color>
     <color name="light_navigationBar">#e1e1e1</color>
     <color name="light_navigationBarTopDivider">#5c8e8e8e</color>
@@ -32,6 +32,6 @@
     <color name="light_editorSaveForeground">#a1a1a1</color>
     <color name="light_listItemDivider">#49818181</color>
     <color name="light_itemSecondaryText">#fff</color>
-    <color name="light_settingsHeaderBackground">#32000000</color>
+    <color name="light_settingsHeaderBackground">#17000000</color>
     <color name="light_highlight">#ffffff</color>
 </resources>
