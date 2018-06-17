@@ -24,6 +24,8 @@ public class ToDoEditorFragment extends Fragment {
     private EditText mToDo;
     private CheckBox mImportant;
     private CheckBox mIsDone;
+    private TextView mTextMessage;
+    private View mButtonClear;
     private ToDoEditorViewModel mViewModel;
     private OnSaveSuccessfulListener mOnSaveSuccessfullyListener;
 
@@ -52,9 +54,9 @@ public class ToDoEditorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView textMessage = view.findViewById(R.id.textMessage);
         View buttonSave = view.findViewById(R.id.buttonSave);
-        View buttonClear = view.findViewById(R.id.buttonClear);
+        mTextMessage = view.findViewById(R.id.textMessage);
+        mButtonClear = view.findViewById(R.id.buttonClear);
         mIsDone = view.findViewById(R.id.checkBoxDone);
         mImportant = view.findViewById(R.id.checkImportant);
         mToDo = view.findViewById(R.id.editTextTodo);
@@ -65,35 +67,13 @@ public class ToDoEditorFragment extends Fragment {
             if (toDo != null) setToDo(toDo);
         });
         mViewModel.getViewStateLiveData().observe(this, state -> {
-            if (state != null) {
-                switch (state) {
-                    case NEW_EMPTY_TODO:
-                        textMessage.setText(R.string.msg_new_todo);
-                        emptyToDo();
-                        break;
-                    case EDIT_DRAFT:
-                        textMessage.setText(R.string.msg_edit_draft);
-                        break;
-                    case EDIT_TODO:
-                        textMessage.setText(R.string.msg_edit_todo);
-                        break;
-                    case EDIT_DONE:
-                        textMessage.setText(R.string.msg_saved);
-                        hideKeyboard();
-                        if (mOnSaveSuccessfullyListener != null) {
-                            mOnSaveSuccessfullyListener.onSaveSuccess();
-                        }
-                        break;
-                }
-            }
+            if (state != null) renderViewState(state);
         });
-
-        long id = getToDoIdArgument();
-        mViewModel.initToDo(id);
+        mViewModel.initToDo(getToDoIdArgument());
 
         buttonSave.setOnClickListener(v ->
                 mViewModel.saveToDo(mToDo.getText().toString(), mImportant.isChecked(), mIsDone.isChecked()));
-        buttonClear.setOnClickListener(v -> mViewModel.clear());
+        mButtonClear.setOnClickListener(v -> mViewModel.clear());
     }
 
     @Override
@@ -124,6 +104,31 @@ public class ToDoEditorFragment extends Fragment {
     private long getToDoIdArgument() {
         if (getArguments() == null) return 0;
         return getArguments().getLong(KEY_TODO_ID);
+    }
+
+    private void renderViewState(ToDoEditorViewModel.ViewState state) {
+        switch (state) {
+            case NEW_EMPTY_TODO:
+                mTextMessage.setText(R.string.msg_new_todo);
+                mButtonClear.setVisibility(View.GONE);
+                emptyToDo();
+                break;
+            case EDIT_DRAFT:
+                mTextMessage.setText(R.string.msg_edit_draft);
+                mButtonClear.setVisibility(View.VISIBLE);
+                break;
+            case EDIT_TODO:
+                mTextMessage.setText(R.string.msg_edit_todo);
+                mButtonClear.setVisibility(View.GONE);
+                break;
+            case EDIT_DONE:
+                mTextMessage.setText(R.string.msg_saved);
+                hideKeyboard();
+                if (mOnSaveSuccessfullyListener != null) {
+                    mOnSaveSuccessfullyListener.onSaveSuccess();
+                }
+                break;
+        }
     }
 
     private void setToDo(ToDo todo) {
