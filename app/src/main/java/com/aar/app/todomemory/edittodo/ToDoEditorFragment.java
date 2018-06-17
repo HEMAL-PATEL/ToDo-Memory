@@ -62,33 +62,23 @@ public class ToDoEditorFragment extends Fragment {
 
         mViewModel = ViewModelProviders.of(this).get(ToDoEditorViewModel.class);
         mViewModel.getToDoLiveData().observe(this, toDo -> {
-            if (toDo != null) {
-                mToDo.setText(toDo.getContent());
-                mToDo.setSelection(mToDo.getText().length());
-                mImportant.setChecked(toDo.isImportant());
-                if (toDo.getState() == ToDo.STATE_DONE) {
-                    mIsDone.setVisibility(View.VISIBLE);
-                    mIsDone.setChecked(true);
-                } else {
-                    mIsDone.setVisibility(View.GONE);
-                    mIsDone.setChecked(false);
-                }
-            }
+            if (toDo != null) setToDo(toDo);
         });
-        mViewModel.getStateLiveData().observe(this, state -> {
+        mViewModel.getViewStateLiveData().observe(this, state -> {
             if (state != null) {
                 switch (state) {
                     case NEW_EMPTY_TODO:
-                        textMessage.setText("New to-do");
+                        textMessage.setText(R.string.msg_new_todo);
+                        emptyToDo();
                         break;
                     case EDIT_DRAFT:
-                        textMessage.setText("Edit draft");
+                        textMessage.setText(R.string.msg_edit_draft);
                         break;
                     case EDIT_TODO:
-                        textMessage.setText("Edit to-do");
+                        textMessage.setText(R.string.msg_edit_todo);
                         break;
                     case EDIT_DONE:
-                        textMessage.setText("Saved");
+                        textMessage.setText(R.string.msg_saved);
                         hideKeyboard();
                         if (mOnSaveSuccessfullyListener != null) {
                             mOnSaveSuccessfullyListener.onSaveSuccess();
@@ -98,12 +88,8 @@ public class ToDoEditorFragment extends Fragment {
             }
         });
 
-        long id = getToDoId();
-        if (id <= 0) {
-            mViewModel.newToDo();
-        } else {
-            mViewModel.editToDo(id);
-        }
+        long id = getToDoIdArgument();
+        mViewModel.initToDo(id);
 
         buttonSave.setOnClickListener(v ->
                 mViewModel.saveToDo(mToDo.getText().toString(), mImportant.isChecked(), mIsDone.isChecked()));
@@ -123,16 +109,39 @@ public class ToDoEditorFragment extends Fragment {
     private void showKeyboardOnToDo() {
         mToDo.requestFocus();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(mToDo, InputMethodManager.SHOW_IMPLICIT);
+        if (imm != null) {
+            imm.showSoftInput(mToDo, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mToDo.getWindowToken(), 0);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(mToDo.getWindowToken(), 0);
+        }
     }
 
-    private long getToDoId() {
+    private long getToDoIdArgument() {
         if (getArguments() == null) return 0;
         return getArguments().getLong(KEY_TODO_ID);
+    }
+
+    private void setToDo(ToDo todo) {
+        mToDo.setText(todo.getContent());
+        mToDo.setSelection(mToDo.getText().length());
+        mImportant.setChecked(todo.isImportant());
+        if (todo.getState() == ToDo.STATE_DONE) {
+            mIsDone.setVisibility(View.VISIBLE);
+            mIsDone.setChecked(true);
+        } else {
+            mIsDone.setVisibility(View.GONE);
+            mIsDone.setChecked(false);
+        }
+    }
+
+    private void emptyToDo() {
+        mToDo.setText("");
+        mImportant.setChecked(false);
+        mIsDone.setVisibility(View.GONE);
     }
 }

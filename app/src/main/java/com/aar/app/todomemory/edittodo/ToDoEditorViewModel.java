@@ -14,7 +14,7 @@ import com.aar.app.todomemory.data.ToDoDatabase;
 
 public class ToDoEditorViewModel extends AndroidViewModel {
 
-    enum State {
+    enum ViewState {
         NEW_EMPTY_TODO,
         EDIT_DRAFT,
         EDIT_TODO,
@@ -25,10 +25,10 @@ public class ToDoEditorViewModel extends AndroidViewModel {
     private DraftDao mDraftDao;
 
     private long mToDoId;
-    private State mState;
+    private ViewState mViewState;
 
     private MutableLiveData<ToDo> mToDoLiveData = new MutableLiveData<>();
-    private MutableLiveData<State> mStateLiveData = new MutableLiveData<>();
+    private MutableLiveData<ViewState> mStateLiveData = new MutableLiveData<>();
 
     public ToDoEditorViewModel(@NonNull Application application) {
         super(application);
@@ -36,32 +36,19 @@ public class ToDoEditorViewModel extends AndroidViewModel {
         mDraftDao = ToDoDatabase.getInstance(application).getDraftDao();
     }
 
-    public void newToDo() {
-        Draft draft = mDraftDao.getDraft();
-        mState = State.EDIT_DRAFT;
-        if (draft == null) {
-            draft = new Draft();
-            mState = State.NEW_EMPTY_TODO;
+    public void initToDo(long todoId) {
+        if (todoId <= 0) {
+            newToDo();
+        } else {
+            editToDo(todoId);
         }
-
-        mStateLiveData.setValue(mState);
-        mToDoLiveData.setValue(toDoFromDraft(draft));
-    }
-
-    public void editToDo(long todoId) {
-        mToDoId = todoId;
-        mState = State.EDIT_TODO;
-
-        mToDoLiveData.setValue(mToDoDao.getBy(mToDoId));
-        mStateLiveData.setValue(mState);
     }
 
     public void clear() {
-        mToDoLiveData.setValue(new ToDo());
-        if (mState == State.EDIT_DRAFT) {
+        if (mViewState == ViewState.EDIT_DRAFT) {
             mDraftDao.clear();
-            mState = State.NEW_EMPTY_TODO;
-            mStateLiveData.setValue(mState);
+            mViewState = ViewState.NEW_EMPTY_TODO;
+            mStateLiveData.setValue(mViewState);
         }
     }
 
@@ -71,7 +58,7 @@ public class ToDoEditorViewModel extends AndroidViewModel {
             return;
         }
 
-        if (mState != State.EDIT_TODO && mState != State.EDIT_DONE) {
+        if (mViewState != ViewState.EDIT_TODO && mViewState != ViewState.EDIT_DONE) {
             mDraftDao.update(new Draft(content, important));
         }
     }
@@ -83,7 +70,7 @@ public class ToDoEditorViewModel extends AndroidViewModel {
         }
 
         int todoState = isDone ? ToDo.STATE_DONE : ToDo.STATE_NONE;
-        if (mState == State.EDIT_TODO) {
+        if (mViewState == ViewState.EDIT_TODO) {
             ToDo todo = mToDoDao.getBy(mToDoId);
             todo.setContent(content);
             todo.setImportant(important);
@@ -95,16 +82,36 @@ public class ToDoEditorViewModel extends AndroidViewModel {
             mDraftDao.clear();
         }
 
-        mState = State.EDIT_DONE;
-        mStateLiveData.setValue(mState);
+        mViewState = ViewState.EDIT_DONE;
+        mStateLiveData.setValue(mViewState);
     }
 
     public LiveData<ToDo> getToDoLiveData() {
         return mToDoLiveData;
     }
 
-    public LiveData<State> getStateLiveData() {
+    public LiveData<ViewState> getViewStateLiveData() {
         return mStateLiveData;
+    }
+
+    private void newToDo() {
+        Draft draft = mDraftDao.getDraft();
+        if (draft == null) {
+            mViewState = ViewState.NEW_EMPTY_TODO;
+        } else {
+            mViewState = ViewState.EDIT_DRAFT;
+            mToDoLiveData.setValue(toDoFromDraft(draft));
+        }
+
+        mStateLiveData.setValue(mViewState);
+    }
+
+    private void editToDo(long todoId) {
+        mToDoId = todoId;
+        mViewState = ViewState.EDIT_TODO;
+
+        mToDoLiveData.setValue(mToDoDao.getBy(mToDoId));
+        mStateLiveData.setValue(mViewState);
     }
 
     private ToDo toDoFromDraft(Draft draft) {

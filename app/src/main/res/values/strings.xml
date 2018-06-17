@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ToDo Memory</string>
+    <string name="msg_new_todo">New to-do</string>
+    <string name="msg_edit_draft">Edit draft</string>
+    <string name="msg_edit_todo">Edit to-do</string>
+    <string name="msg_saved">Saved</string>
 </resources>
