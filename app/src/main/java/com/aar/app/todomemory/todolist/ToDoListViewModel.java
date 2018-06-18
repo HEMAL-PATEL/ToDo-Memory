@@ -122,15 +122,15 @@ public class ToDoListViewModel extends AndroidViewModel {
         return mNotificationEnableState;
     }
 
-    public SingleLiveEvent<Integer> getOnToDoDeleted() {
+    public LiveData<Integer> getOnToDoDeleted() {
         return mOnToDoDeleted;
     }
 
-    public SingleLiveEvent<Integer> getOnToDoDone() {
+    public LiveData<Integer> getOnToDoDone() {
         return mOnToDoDone;
     }
 
-    public SingleLiveEvent<Pair<Integer, ToDo>> getOnUndo() {
+    public LiveData<Pair<Integer, ToDo>> getOnUndo() {
         return mOnUndo;
     }
 

@@ -60,11 +60,11 @@ public class HistoryViewModel extends AndroidViewModel {
         return mHistoryLiveData;
     }
 
-    public SingleLiveEvent<Integer> getHistoryDeleted() {
+    public LiveData<Integer> getHistoryDeleted() {
         return mHistoryDeleted;
     }
 
-    public SingleLiveEvent<Integer> getOnHistoryReused() {
+    public LiveData<Integer> getOnHistoryReused() {
         updateHistoryList();
         return mOnHistoryReused;
     }
