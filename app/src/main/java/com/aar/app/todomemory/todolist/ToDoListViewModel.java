@@ -101,7 +101,7 @@ public class ToDoListViewModel extends AndroidViewModel {
             mHistoryDao.insert(getHistory(todo));
         }
 
-        if (mSettingsProvider.isRemoveWhenDone()) {
+        if (mSettingsProvider.removeWhenDone()) {
             delete(index);
         } else {
             mToDoDao.update(todo);

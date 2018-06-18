@@ -12,63 +12,9 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomButtons"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/bottomButtons"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:background="?attr/navigationBar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?attr/navigationBarTopDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageButton
-            android:id="@+id/buttonHistory"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="?attr/navigationButtonBackground"
-            android:onClick="onHistoryButtonClicked"
-            android:src="@drawable/ic_history"
-            android:tint="?attr/primaryText"
-            app:layout_constraintEnd_toStartOf="@+id/buttonAdd"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <ImageButton
-            android:id="@+id/buttonAdd"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="?attr/navigationButtonBackground"
-            android:onClick="onAddButtonClicked"
-            android:src="@drawable/ic_add"
-            android:tint="?attr/primaryText"
-            app:layout_constraintEnd_toStartOf="@+id/buttonSettings"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buttonHistory"/>
-
-        <ImageButton
-            android:id="@+id/buttonSettings"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="?attr/navigationButtonBackground"
-            android:onClick="onSettingsButtonClicked"
-            android:src="@drawable/ic_settings"
-            android:tint="?attr/primaryText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buttonAdd"/>
-    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,9 @@
 package com.aar.app.todomemory.todolist;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,20 +13,19 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.aar.app.todomemory.R;
+import com.aar.app.todomemory.Utils;
 import com.aar.app.todomemory.model.ToDo;
 import com.aar.app.todomemory.settings.SettingsProvider;
 
-import java.util.ArrayList;
 
 public class ToDoListFragment extends Fragment {
 
@@ -33,7 +35,7 @@ public class ToDoListFragment extends Fragment {
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView recyclerViewToDos;
     private TextView textEmpty;
-    private View buttonNotifyMe;
+    private ImageButton notifyMeButton;
 
     public ToDoListFragment() {
     }
@@ -42,7 +44,11 @@ public class ToDoListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ToDoListViewModel.class);
-
+        mToDoListAdapter.setOnToDoClickListener(todo -> {
+            if (isActivityNavListener()) {
+                getNavigationClickListener().onGoToEdit(todo.getId());
+            }
+        });
     }
 
     @Nullable
@@ -57,7 +63,7 @@ public class ToDoListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        buttonNotifyMe = view.findViewById(R.id.buttonNotifyMe);
+        initBottomButtons(view);
         mCoordinatorLayout = view.findViewById(R.id.coordinatorLayout);
         recyclerViewToDos = view.findViewById(R.id.recyclerViewToDo);
         recyclerViewToDos.setAdapter(mToDoListAdapter);
@@ -77,31 +83,23 @@ public class ToDoListFragment extends Fragment {
 
         mViewModel.getToDosLiveData().observe(this, todos -> {
             if (todos != null && !todos.isEmpty()) {
-                buttonNotifyMe.setVisibility(View.VISIBLE);
+                unDimNotifyMeButton();
                 textEmpty.setVisibility(View.GONE);
                 recyclerViewToDos.setVisibility(View.VISIBLE);
 
                 setTextAlignmentOnAdapter();
                 mToDoListAdapter.replaceData(todos);
             } else {
-                buttonNotifyMe.setVisibility(View.GONE);
+                dimNotifyMeButton();
                 textEmpty.setVisibility(View.VISIBLE);
             }
         });
-        mViewModel.getNotificationEnableState().observe(this, this::onNotifEnableState);
+        mViewModel.getNotificationEnableState().observe(this, this::onNotifyMeEnableState);
         mViewModel.getOnToDoDeleted().observe(this, this::onDeleted);
         mViewModel.getOnToDoDone().observe(this, mToDoListAdapter::notifyItemChanged);
         mViewModel.getOnUndo().observe(this, this::onUndo);
 
         textEmpty = view.findViewById(R.id.textEmpty);
-
-        buttonNotifyMe.setOnClickListener(v -> {
-            mViewModel.switchEnableNotification();
-        });
-    }
-
-    public void setOnToDoClickListener(ToDoListAdapter.OnToDoClickListener<ToDo> listener) {
-        mToDoListAdapter.setOnToDoClickListener(listener);
     }
 
     private void setTextAlignmentOnAdapter() {
@@ -122,20 +120,77 @@ public class ToDoListFragment extends Fragment {
     }
 
     private void onUndo(Pair<Integer, ToDo> undoObj) {
+        unDimNotifyMeButton();
         textEmpty.setVisibility(View.GONE);
         mToDoListAdapter.insertAt(undoObj.first, undoObj.second);
     }
 
-    private void onNotifEnableState(Boolean enabled) {
-        TextView textView = buttonNotifyMe.findViewById(R.id.textViewNotifyMe);
-        ImageView imageView = buttonNotifyMe.findViewById(R.id.imageViewNotifyMe);
-        String text = "Notify me when screen turn on";
+    private void onNotifyMeEnableState(Boolean enabled) {
         if (enabled) {
-            imageView.setImageResource(R.drawable.ic_notifications);
-            textView.setText(text + " (enabled)");
+            int color = Utils.getColorThemeAttribute(getContext(), R.attr.colorAccent);
+            notifyMeButton.setImageResource(R.drawable.ic_notifications);
+            notifyMeButton.getDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
         } else {
-            imageView.setImageResource(R.drawable.ic_notifications_none);
-            textView.setText(text + " (disabled)");
+            notifyMeButton.setImageResource(R.drawable.ic_notifications_none);
         }
+    }
+
+    private void initBottomButtons(View view) {
+        notifyMeButton = view.findViewById(R.id.buttonNotify);
+        View addBtn = view.findViewById(R.id.buttonAdd);
+        View historyBtn = view.findViewById(R.id.buttonHistory);
+        View settingsBtn = view.findViewById(R.id.buttonSettings);
+
+        notifyMeButton.setOnClickListener(this::onNotifyMeButtonClick);
+        addBtn.setOnClickListener(this::onAddButtonClick);
+        historyBtn.setOnClickListener(this::onHistoryButtonClick);
+        settingsBtn.setOnClickListener(this::onSettingsButtonClick);
+    }
+
+    private void dimNotifyMeButton() {
+        notifyMeButton.setAlpha(0.5f);
+        notifyMeButton.setEnabled(false);
+    }
+
+    private void unDimNotifyMeButton() {
+        notifyMeButton.setAlpha(1f);
+        notifyMeButton.setEnabled(true);
+    }
+
+    private void onAddButtonClick(View v) {
+        if (isActivityNavListener()) {
+            getNavigationClickListener().onGoToAdd();
+        }
+    }
+
+    private void onNotifyMeButtonClick(View v) {
+        mViewModel.switchEnableNotification();
+    }
+
+    private void onHistoryButtonClick(View v) {
+        if (isActivityNavListener()) {
+            getNavigationClickListener().onGoToHistory();
+        }
+    }
+
+    private void onSettingsButtonClick(View v) {
+        if (isActivityNavListener()) {
+            getNavigationClickListener().onGoToSettings();
+        }
+    }
+
+    private OnNavigationClickListener getNavigationClickListener() {
+        return (OnNavigationClickListener) getActivity();
+    }
+
+    private boolean isActivityNavListener() {
+        return getActivity() instanceof OnNavigationClickListener;
+    }
+
+    public interface OnNavigationClickListener {
+        void onGoToAdd();
+        void onGoToEdit(long todoId);
+        void onGoToHistory();
+        void onGoToSettings();
     }
 }

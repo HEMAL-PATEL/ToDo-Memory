@@ -46,8 +46,6 @@ public class SettingsFragment extends Fragment {
 
         SwitchCompat switchRemove = view.findViewById(R.id.switchRemove);
         SwitchCompat switchHistory = view.findViewById(R.id.switchHistory);
-        SwitchCompat switchRunTurnOn = view.findViewById(R.id.switchRunTurnOn);
-        SwitchCompat switchRunOnly = view.findViewById(R.id.switchRunOnly);
         View alignLeft = view.findViewById(R.id.alignLeft);
         View alignCenter = view.findViewById(R.id.alignCenter);
         View alignRight = view.findViewById(R.id.alignRight);
@@ -61,13 +59,11 @@ public class SettingsFragment extends Fragment {
 
         mViewModel.getRemoveWhenDone().observe(this, enable -> switchRemove.setChecked(enable == null ? false : enable));
         mViewModel.getHistoryWhenDone().observe(this, enable -> switchHistory.setChecked(enable == null ? false : enable));
-        mViewModel.getRunWhenTurnOn().observe(this, enable -> switchRunTurnOn.setChecked(enable == null ? false : enable));
-        mViewModel.getRunOnlyWhenToDoExist().observe(this, enable -> switchRunOnly.setChecked(enable == null ? false : enable));
         mViewModel.getTextAlignment().observe(this, alignment -> {
             alignLeft.setBackgroundColor(Color.TRANSPARENT);
             alignCenter.setBackgroundColor(Color.TRANSPARENT);
             alignRight.setBackgroundColor(Color.TRANSPARENT);
-            int highlightColor = getColorHighlightFromTheme();
+            int highlightColor = Utils.getColorThemeAttribute(getContext(), R.attr.settingsSelectHighlight);
             if (alignment == SettingsProvider.ALIGN_LEFT) alignLeft.setBackgroundColor(highlightColor);
             else if (alignment == SettingsProvider.ALIGN_CENTER) alignCenter.setBackgroundColor(highlightColor);
             else if (alignment == SettingsProvider.ALIGN_RIGHT) alignRight.setBackgroundColor(highlightColor);
@@ -75,7 +71,7 @@ public class SettingsFragment extends Fragment {
         mViewModel.getTodoOrder().observe(this, order -> {
             orderAsc.setBackgroundColor(Color.TRANSPARENT);
             orderDesc.setBackgroundColor(Color.TRANSPARENT);
-            int highlightColor = getColorHighlightFromTheme();
+            int highlightColor = Utils.getColorThemeAttribute(getContext(), R.attr.settingsSelectHighlight);
             if (order == SettingsProvider.ORDER_ASC) orderAsc.setBackgroundColor(highlightColor);
             else if (order == SettingsProvider.ORDER_DESC) orderDesc.setBackgroundColor(highlightColor);
         });
@@ -84,8 +80,6 @@ public class SettingsFragment extends Fragment {
 
         switchRemove.setOnCheckedChangeListener((buttonView, isChecked) -> mViewModel.setRemoveWhenDone(isChecked));
         switchHistory.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setHistoryWhenDone(isChecked)));
-        switchRunTurnOn.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setRunWhenTurnOn(isChecked)));
-        switchRunOnly.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setRunOnlyWhenToDoExist(isChecked)));
         alignLeft.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_LEFT));
         alignCenter.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_CENTER));
         alignRight.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_RIGHT));
@@ -121,10 +115,4 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    private int getColorHighlightFromTheme() {
-        TypedArray a = getActivity().getTheme().obtainStyledAttributes(new int[]{R.attr.settingsSelectHighlight});
-        int color = a.getColor(0, Color.WHITE);
-        a.recycle();
-        return color;
-    }
 }

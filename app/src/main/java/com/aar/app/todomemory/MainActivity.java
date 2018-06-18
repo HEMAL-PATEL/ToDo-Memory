@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
 import com.aar.app.todomemory.edittodo.ToDoEditorFragment;
 import com.aar.app.todomemory.history.HistoryFragment;
@@ -12,9 +11,8 @@ import com.aar.app.todomemory.settings.SettingsFragment;
 import com.aar.app.todomemory.settings.SettingsProvider;
 import com.aar.app.todomemory.todolist.ToDoListFragment;
 
-public class MainActivity extends AppCompatActivity implements SettingsFragment.OnThemeChanged {
-
-    private View mBottomNavigation;
+public class MainActivity extends AppCompatActivity
+        implements SettingsFragment.OnThemeChanged, ToDoListFragment.OnNavigationClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +24,9 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
 
         setContentView(R.layout.activity_main);
 
-        mBottomNavigation = findViewById(R.id.bottomButtons);
-
         if (savedInstanceState == null) {
             goToToDoList();
-        } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            hideNavigationButtons();
         }
-
-        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                showNavigationButtons();
-            }
-        });
     }
 
     @Override
@@ -46,37 +34,34 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         recreate();
     }
 
-    public void onHistoryButtonClicked(View view) {
-        goToHistory();
-    }
-
-    public void onAddButtonClicked(View view) {
+    @Override
+    public void onGoToAdd() {
         goToToDoEditor(0);
     }
 
-    public void onSettingsButtonClicked(View view) {
-        goToSettings();
+    @Override
+    public void onGoToEdit(long todoId) {
+        goToToDoEditor(todoId);
+    }
+
+    @Override
+    public void onGoToHistory() {
+        replaceFragment(new HistoryFragment(), true, true);
+    }
+
+    @Override
+    public void onGoToSettings() {
+        SettingsFragment fragment = new SettingsFragment();
+        replaceFragment(fragment, true, true);
     }
 
     private void goToToDoList() {
-        ToDoListFragment fragment = new ToDoListFragment();
-        fragment.setOnToDoClickListener(todo -> goToToDoEditor(todo.getId()));
-        replaceFragment(fragment, true, false);
-        showNavigationButtons();
+        replaceFragment(new ToDoListFragment(), true, false);
     }
 
     private void goToToDoEditor(long todoId) {
         ToDoEditorFragment fragment = ToDoEditorFragment.newInstance(todoId);
         fragment.setOnSaveSuccessfullyListener(this::onBackPressed);
-        replaceFragment(fragment, true, true);
-    }
-
-    private void goToHistory() {
-        replaceFragment(new HistoryFragment(), true, true);
-    }
-
-    private void goToSettings() {
-        SettingsFragment fragment = new SettingsFragment();
         replaceFragment(fragment, true, true);
     }
 
@@ -93,19 +78,5 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         }
 
         transaction.commit();
-        if (fragment instanceof ToDoListFragment) {
-            showNavigationButtons();
-        } else {
-            hideNavigationButtons();
-        }
     }
-
-    private void hideNavigationButtons() {
-        mBottomNavigation.setVisibility(View.GONE);
-    }
-
-    private void showNavigationButtons() {
-        mBottomNavigation.setVisibility(View.VISIBLE);
-    }
-
 }

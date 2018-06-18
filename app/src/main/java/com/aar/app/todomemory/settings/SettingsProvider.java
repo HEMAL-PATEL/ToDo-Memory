@@ -21,8 +21,6 @@ public class SettingsProvider {
 
     private static final String KEY_REMOVE_WHEN_DONE = "remove_when_done";
     private static final String KEY_HISTORY_WHEN_DONE = "history_when_done";
-    private static final String KEY_RUN_WHEN_TURN_ON = "run_when_turn_on";
-    private static final String KEY_RUN_ONLY_TODO_EXIST = "run_only_todo_exist";
     private static final String KEY_TEXT_ALIGN = "text_align";
     private static final String KEY_ORDER = "order";
     private static final String KEY_THEME = "theme";
@@ -43,7 +41,7 @@ public class SettingsProvider {
         mPref = application.getSharedPreferences("todo_memory", Context.MODE_PRIVATE);
     }
 
-    public boolean isRemoveWhenDone() {
+    public boolean removeWhenDone() {
         return mPref.getBoolean(KEY_REMOVE_WHEN_DONE, false);
     }
 
@@ -60,26 +58,6 @@ public class SettingsProvider {
     public void setHistoryWhenDone(boolean enable) {
         mPref.edit()
                 .putBoolean(KEY_HISTORY_WHEN_DONE, enable)
-                .apply();
-    }
-
-    public boolean runWhenTurnOn() {
-        return mPref.getBoolean(KEY_RUN_WHEN_TURN_ON, true);
-    }
-
-    public void setRunWhenTurnOn(boolean enable) {
-        mPref.edit()
-                .putBoolean(KEY_RUN_WHEN_TURN_ON, enable)
-                .apply();
-    }
-
-    public boolean runOnlyWhenToDoExist() {
-        return mPref.getBoolean(KEY_RUN_ONLY_TODO_EXIST, true);
-    }
-
-    public void setRunOnlyWhenToDoExist(boolean enable) {
-        mPref.edit()
-                .putBoolean(KEY_RUN_ONLY_TODO_EXIST, enable)
                 .apply();
     }
 

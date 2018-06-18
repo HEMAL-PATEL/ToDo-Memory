@@ -3,6 +3,8 @@ package com.aar.app.todomemory;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.net.Uri;
 
 public class Utils {
@@ -28,5 +30,12 @@ public class Utils {
     public static void stopPhoneScreenEventService(Context context) {
         Intent i = new Intent(context, PhoneScreenService.class);
         context.stopService(i);
+    }
+
+    public static int getColorThemeAttribute(Context context, int attr) {
+        TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
+        int color = a.getColor(0, Color.WHITE);
+        a.recycle();
+        return color;
     }
 }

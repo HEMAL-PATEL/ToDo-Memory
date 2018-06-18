@@ -54,48 +54,10 @@
         android:text="History when done"
         android:textColor="?attr/primaryText"
         android:thumb="@drawable/switch_thumb"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchRemove"
-        app:track="@drawable/switch_track"/>
-
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/switchRunTurnOn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:background="@android:color/transparent"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        android:text="Run everytime screen wake up"
-        android:textColor="?attr/primaryText"
-        android:thumb="@drawable/switch_thumb"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchHistory"
-        app:track="@drawable/switch_track"/>
-
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/switchRunOnly"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:background="@android:color/transparent"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        android:text="Run only when there is to-do"
-        android:textColor="?attr/primaryText"
-        android:thumb="@drawable/switch_thumb"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchRunTurnOn"
+        app:layout_constraintTop_toBottomOf="@+id/switchRemove"
         app:track="@drawable/switch_track"/>
 
 </android.support.constraint.ConstraintLayout>
