@@ -38,4 +38,5 @@
     <string name="msg_deleted">To-do successfully deleted</string>
     <string name="msg_todo_added">Added to current list</string>
     <string name="lbl_done_at">Done at %s</string>
+    <string name="h_9">to enable/disable auto launch when the screen turn on</string>
 </resources>
