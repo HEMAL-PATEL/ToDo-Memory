@@ -1,8 +1,6 @@
 package com.aar.app.todomemory.todolist;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -118,8 +116,8 @@ public class ToDoListFragment extends Fragment {
 
     private void onDeleted(int index) {
         mToDoListAdapter.removeAt(index);
-        Snackbar.make(mCoordinatorLayout, "To-do successfully deleted", Snackbar.LENGTH_LONG)
-                .setAction("Undo", v -> mViewModel.undo())
+        Snackbar.make(mCoordinatorLayout, R.string.msg_deleted, Snackbar.LENGTH_LONG)
+                .setAction(R.string.lbl_undo, v -> mViewModel.undo())
                 .show();
     }
 

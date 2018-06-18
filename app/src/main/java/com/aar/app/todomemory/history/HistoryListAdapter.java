@@ -61,7 +61,9 @@ public class HistoryListAdapter extends ArrayListAdapter<History, HistoryListAda
                 viewImportant.setVisibility(View.GONE);
             }
 
-            textDate.setText("Done at " + DATE_FORMAT.format(todo.getDoneAt()));
+            String dateString = String
+                    .format(textDate.getContext().getString(R.string.lbl_done_at), DATE_FORMAT.format(todo.getDoneAt()));
+            textDate.setText(dateString);
         }
     }
 }

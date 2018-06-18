@@ -79,6 +79,6 @@ public class HistoryFragment extends Fragment {
 
     private void onHistoryReused(int index) {
         mHistoryListAdapter.notifyItemChanged(index);
-        Toast.makeText(getContext(), "Added to to-do list", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.msg_todo_added, Toast.LENGTH_SHORT).show();
     }
 }
