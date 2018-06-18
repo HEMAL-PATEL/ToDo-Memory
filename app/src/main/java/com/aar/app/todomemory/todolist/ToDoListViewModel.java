@@ -3,6 +3,7 @@ package com.aar.app.todomemory.todolist;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Pair;
@@ -31,6 +32,7 @@ public class ToDoListViewModel extends AndroidViewModel {
     private List<ToDo> mTodoList = new ArrayList<>();
 
     private MutableLiveData<List<ToDo>> mToDosLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mNotificationEnableState = new MediatorLiveData<>();
     private SingleLiveEvent<Integer> mOnToDoDeleted = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> mOnToDoDone = new SingleLiveEvent<>();
     private SingleLiveEvent<Pair<Integer, ToDo>> mOnUndo = new SingleLiveEvent<>();
@@ -41,6 +43,27 @@ public class ToDoListViewModel extends AndroidViewModel {
         mHistoryDao = ToDoDatabase.getInstance(application).getHistoryDao();
         mSettingsProvider = SettingsProvider.getInstance(application);
         mAutoLaunchServiceManager = new AutoLaunchServiceManager(application);
+        mNotificationEnableState.setValue(mAutoLaunchServiceManager.isEnabled());
+    }
+
+    public void switchEnableNotification() {
+        if (mAutoLaunchServiceManager.isEnabled()) {
+            disableNotification();
+        } else {
+            enableNotification();
+        }
+    }
+
+    private void enableNotification() {
+        if (mToDoDao.getCount() > 0) {
+            mAutoLaunchServiceManager.start();
+            mNotificationEnableState.setValue(mAutoLaunchServiceManager.isEnabled());
+        }
+    }
+
+    private void disableNotification() {
+        mAutoLaunchServiceManager.stop();
+        mNotificationEnableState.setValue(mAutoLaunchServiceManager.isEnabled());
     }
 
     public void delete(int index) {
@@ -53,9 +76,7 @@ public class ToDoListViewModel extends AndroidViewModel {
         if (mTodoList.isEmpty()) {
             mToDosLiveData.setValue(mTodoList);
 
-            if (mSettingsProvider.runWhenTurnOn() && mSettingsProvider.runOnlyWhenToDoExist()) {
-                mAutoLaunchServiceManager.stop();
-            }
+            disableNotification();
         }
     }
 
@@ -68,10 +89,6 @@ public class ToDoListViewModel extends AndroidViewModel {
             mTodoList.add(index, todo);
             mOnUndo.setValue(mLastDeleted);
             mLastDeleted = null;
-
-            if (mSettingsProvider.runWhenTurnOn()) {
-                mAutoLaunchServiceManager.start();
-            }
         }
     }
 
@@ -101,6 +118,10 @@ public class ToDoListViewModel extends AndroidViewModel {
         return mToDosLiveData;
     }
 
+    public LiveData<Boolean> getNotificationEnableState() {
+        return mNotificationEnableState;
+    }
+
     public SingleLiveEvent<Integer> getOnToDoDeleted() {
         return mOnToDoDeleted;
     }
@@ -128,18 +149,6 @@ public class ToDoListViewModel extends AndroidViewModel {
         else
             mTodoList = mToDoDao.getAllDesc();
         mToDosLiveData.setValue(mTodoList);
-
-        if (mSettingsProvider.runWhenTurnOn()) {
-            if (mSettingsProvider.runOnlyWhenToDoExist()) {
-                if (mTodoList.isEmpty()) {
-                    mAutoLaunchServiceManager.stop();
-                } else {
-                    mAutoLaunchServiceManager.start();
-                }
-            } else {
-                mAutoLaunchServiceManager.start();
-            }
-        }
     }
 
     private boolean isIndexValid(int index) {

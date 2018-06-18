@@ -9,7 +9,13 @@ import android.os.IBinder;
 
 public class PhoneScreenService extends Service {
 
+    private static boolean sIsRunning = false;
+
     private PhoneScreenEventReceiver mReceiver;
+
+    public static boolean isRunning() {
+        return sIsRunning;
+    }
 
     public PhoneScreenService() {
     }
@@ -43,6 +49,7 @@ public class PhoneScreenService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
+        sIsRunning = true;
 
         if (intent.hasExtra(PhoneScreenEventReceiver.EXTRA_SCREEN_STATE)) {
             boolean screenOn = intent.getBooleanExtra(PhoneScreenEventReceiver.EXTRA_SCREEN_STATE, false);
@@ -56,6 +63,7 @@ public class PhoneScreenService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        sIsRunning = false;
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
         }

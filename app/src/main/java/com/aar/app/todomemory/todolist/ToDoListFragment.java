@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aar.app.todomemory.R;
@@ -32,6 +33,7 @@ public class ToDoListFragment extends Fragment {
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView recyclerViewToDos;
     private TextView textEmpty;
+    private View buttonNotifyMe;
 
     public ToDoListFragment() {
     }
@@ -55,6 +57,7 @@ public class ToDoListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        buttonNotifyMe = view.findViewById(R.id.buttonNotifyMe);
         mCoordinatorLayout = view.findViewById(R.id.coordinatorLayout);
         recyclerViewToDos = view.findViewById(R.id.recyclerViewToDo);
         recyclerViewToDos.setAdapter(mToDoListAdapter);
@@ -74,20 +77,27 @@ public class ToDoListFragment extends Fragment {
 
         mViewModel.getToDosLiveData().observe(this, todos -> {
             if (todos != null && !todos.isEmpty()) {
+                buttonNotifyMe.setVisibility(View.VISIBLE);
                 textEmpty.setVisibility(View.GONE);
                 recyclerViewToDos.setVisibility(View.VISIBLE);
 
                 setTextAlignmentOnAdapter();
                 mToDoListAdapter.replaceData(todos);
             } else {
+                buttonNotifyMe.setVisibility(View.GONE);
                 textEmpty.setVisibility(View.VISIBLE);
             }
         });
+        mViewModel.getNotificationEnableState().observe(this, this::onNotifEnableState);
         mViewModel.getOnToDoDeleted().observe(this, this::onDeleted);
         mViewModel.getOnToDoDone().observe(this, mToDoListAdapter::notifyItemChanged);
         mViewModel.getOnUndo().observe(this, this::onUndo);
 
         textEmpty = view.findViewById(R.id.textEmpty);
+
+        buttonNotifyMe.setOnClickListener(v -> {
+            mViewModel.switchEnableNotification();
+        });
     }
 
     public void setOnToDoClickListener(ToDoListAdapter.OnToDoClickListener<ToDo> listener) {
@@ -114,5 +124,18 @@ public class ToDoListFragment extends Fragment {
     private void onUndo(Pair<Integer, ToDo> undoObj) {
         textEmpty.setVisibility(View.GONE);
         mToDoListAdapter.insertAt(undoObj.first, undoObj.second);
+    }
+
+    private void onNotifEnableState(Boolean enabled) {
+        TextView textView = buttonNotifyMe.findViewById(R.id.textViewNotifyMe);
+        ImageView imageView = buttonNotifyMe.findViewById(R.id.imageViewNotifyMe);
+        String text = "Notify me when screen turn on";
+        if (enabled) {
+            imageView.setImageResource(R.drawable.ic_notifications);
+            textView.setText(text + " (enabled)");
+        } else {
+            imageView.setImageResource(R.drawable.ic_notifications_none);
+            textView.setText(text + " (disabled)");
+        }
     }
 }
