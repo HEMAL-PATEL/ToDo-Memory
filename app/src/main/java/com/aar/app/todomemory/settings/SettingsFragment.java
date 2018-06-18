@@ -1,8 +1,7 @@
 package com.aar.app.todomemory.settings;
 
-import android.arch.lifecycle.Observer;
+
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aar.app.todomemory.PhoneScreenService;
 import com.aar.app.todomemory.R;
 import com.aar.app.todomemory.Utils;
 
@@ -22,7 +20,6 @@ public class SettingsFragment extends Fragment {
 
     private HelpFragment mHelpFragment;
     private SettingsViewModel mViewModel;
-    private OnThemeChanged mOnThemeChanged;
 
     public interface OnThemeChanged {
         void onThemeChanged(int themeRes);
@@ -103,13 +100,13 @@ public class SettingsFragment extends Fragment {
             if (order == SettingsProvider.ORDER_ASC) orderAsc.setBackgroundColor(highlightColor);
             else if (order == SettingsProvider.ORDER_DESC) orderDesc.setBackgroundColor(highlightColor);
         });
-        mViewModel.getOnThemeChanged().observe(this, theme -> {
-            if (mOnThemeChanged != null) mOnThemeChanged.onThemeChanged(theme);
-        });
+        mViewModel.getOnThemeChanged().observe(this, this::onThemeChanged);
     }
 
-    public void setOnThemeChanged(OnThemeChanged listener) {
-        mOnThemeChanged = listener;
+    private void onThemeChanged(int theme) {
+        if (getActivity() instanceof OnThemeChanged) {
+            ((OnThemeChanged) getActivity()).onThemeChanged(theme);
+        }
     }
 
     private void onRateAppClick(View v) {

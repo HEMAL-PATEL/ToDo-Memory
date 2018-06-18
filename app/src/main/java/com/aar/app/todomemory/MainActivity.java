@@ -13,7 +13,7 @@ import com.aar.app.todomemory.settings.SettingsFragment;
 import com.aar.app.todomemory.settings.SettingsProvider;
 import com.aar.app.todomemory.todolist.ToDoListFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SettingsFragment.OnThemeChanged {
 
     private View mBottomNavigation;
 
@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
                 showNavigationButtons();
             }
         });
+    }
+
+    @Override
+    public void onThemeChanged(int themeRes) {
+        recreate();
     }
 
     public void onHistoryButtonClicked(View view) {
@@ -77,9 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToSettings() {
         SettingsFragment fragment = new SettingsFragment();
-        fragment.setOnThemeChanged(themeRes -> {
-            recreate();
-        });
         replaceFragment(fragment, true, true);
     }
 
@@ -109,10 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void showNavigationButtons() {
         mBottomNavigation.setVisibility(View.VISIBLE);
-    }
-
-    private void updateTheme() {
-
     }
 
 }
