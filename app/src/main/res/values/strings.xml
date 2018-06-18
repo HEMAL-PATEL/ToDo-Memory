@@ -4,4 +4,5 @@
     <string name="msg_edit_draft">Edit draft</string>
     <string name="msg_edit_todo">Edit to-do</string>
     <string name="msg_saved">Saved</string>
+    <string name="notif_content_text">Remember things you want to do</string>
 </resources>

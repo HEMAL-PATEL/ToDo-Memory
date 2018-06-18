@@ -35,10 +35,11 @@ public class PhoneScreenService extends Service {
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, i, 0);
         Notification notification = new Notification.Builder(this)
-                .setContentText("tap to launch")
+                .setContentText(getText(R.string.notif_content_text))
                 .setContentTitle(getText(R.string.app_name))
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher).getNotification();
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .getNotification();
 
         startForeground(123, notification);
     }
