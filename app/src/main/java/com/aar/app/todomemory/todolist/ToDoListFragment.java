@@ -26,6 +26,8 @@ import com.aar.app.todomemory.Utils;
 import com.aar.app.todomemory.model.ToDo;
 import com.aar.app.todomemory.settings.SettingsProvider;
 
+import java.util.List;
+
 
 public class ToDoListFragment extends Fragment {
 
@@ -81,25 +83,27 @@ public class ToDoListFragment extends Fragment {
         });
         itemTouchHelper.attachToRecyclerView(recyclerViewToDos);
 
-        mViewModel.getToDosLiveData().observe(this, todos -> {
-            if (todos != null && !todos.isEmpty()) {
-                unDimNotifyMeButton();
-                textEmpty.setVisibility(View.GONE);
-                recyclerViewToDos.setVisibility(View.VISIBLE);
-
-                setTextAlignmentOnAdapter();
-                mToDoListAdapter.replaceData(todos);
-            } else {
-                dimNotifyMeButton();
-                textEmpty.setVisibility(View.VISIBLE);
-            }
-        });
+        mViewModel.getToDosLiveData().observe(this, this::todoListChanged);
         mViewModel.getNotificationEnableState().observe(this, this::onNotifyMeEnableState);
         mViewModel.getOnToDoDeleted().observe(this, this::onDeleted);
         mViewModel.getOnToDoDone().observe(this, mToDoListAdapter::notifyItemChanged);
         mViewModel.getOnUndo().observe(this, this::onUndo);
 
         textEmpty = view.findViewById(R.id.textEmpty);
+    }
+
+    private void todoListChanged(List<ToDo> todos) {
+        if (todos != null && !todos.isEmpty()) {
+            unDimNotifyMeButton();
+            textEmpty.setVisibility(View.GONE);
+            recyclerViewToDos.setVisibility(View.VISIBLE);
+
+            setTextAlignmentOnAdapter();
+            mToDoListAdapter.replaceData(todos);
+        } else {
+            dimNotifyMeButton();
+            textEmpty.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setTextAlignmentOnAdapter() {

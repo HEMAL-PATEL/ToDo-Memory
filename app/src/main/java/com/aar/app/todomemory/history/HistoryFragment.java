@@ -17,10 +17,15 @@ import android.widget.Toast;
 import com.aar.app.todomemory.R;
 import com.aar.app.todomemory.model.History;
 
+import java.util.List;
+
 public class HistoryFragment extends Fragment {
 
     private HistoryViewModel mViewModel;
     private HistoryListAdapter mHistoryListAdapter = new HistoryListAdapter();
+
+    private RecyclerView mRecyclerViewHistory;
+    private TextView mEmptyText;
 
     public HistoryFragment(){
     }
@@ -36,10 +41,10 @@ public class HistoryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         View textClear = view.findViewById(R.id.textClear);
-        TextView emptyText = view.findViewById(R.id.textEmpty);
-        RecyclerView recyclerViewToDos = view.findViewById(R.id.recyclerViewToDo);
-        recyclerViewToDos.setAdapter(mHistoryListAdapter);
-        recyclerViewToDos.setLayoutManager(new LinearLayoutManager(getContext()));
+        mEmptyText = view.findViewById(R.id.textEmpty);
+        mRecyclerViewHistory = view.findViewById(R.id.recyclerViewToDo);
+        mRecyclerViewHistory.setAdapter(mHistoryListAdapter);
+        mRecyclerViewHistory.setLayoutManager(new LinearLayoutManager(getContext()));
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new HistorySwipeCallback() {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
@@ -51,25 +56,29 @@ public class HistoryFragment extends Fragment {
                 }
             }
         });
-        itemTouchHelper.attachToRecyclerView(recyclerViewToDos);
+        itemTouchHelper.attachToRecyclerView(mRecyclerViewHistory);
 
         mViewModel = ViewModelProviders.of(this).get(HistoryViewModel.class);
-        mViewModel.getToDoHistoryLiveData().observe(this, toDoHistories -> {
-            if (toDoHistories != null && !toDoHistories.isEmpty()) {
-                emptyText.setVisibility(View.GONE);
-                recyclerViewToDos.setVisibility(View.VISIBLE);
-                mHistoryListAdapter.replaceData(toDoHistories);
-            } else {
-                emptyText.setVisibility(View.VISIBLE);
-                recyclerViewToDos.setVisibility(View.GONE);
-            }
-        });
-        mViewModel.getOnHistoryReused().observe(this, index -> {
-            mHistoryListAdapter.notifyItemChanged(index);
-            Toast.makeText(getContext(), "Added to to-do list", Toast.LENGTH_SHORT).show();
-        });
+        mViewModel.getToDoHistoryLiveData().observe(this, this::historyListChanged);
+        mViewModel.getOnHistoryReused().observe(this, this::onHistoryReused);
         mViewModel.getHistoryDeleted().observe(this, mHistoryListAdapter::removeAt);
 
         textClear.setOnClickListener(v -> mViewModel.clear());
+    }
+
+    private void historyListChanged(List<History> histories) {
+        if (histories != null && !histories.isEmpty()) {
+            mEmptyText.setVisibility(View.GONE);
+            mRecyclerViewHistory.setVisibility(View.VISIBLE);
+            mHistoryListAdapter.replaceData(histories);
+        } else {
+            mEmptyText.setVisibility(View.VISIBLE);
+            mRecyclerViewHistory.setVisibility(View.GONE);
+        }
+    }
+
+    private void onHistoryReused(int index) {
+        mHistoryListAdapter.notifyItemChanged(index);
+        Toast.makeText(getContext(), "Added to to-do list", Toast.LENGTH_SHORT).show();
     }
 }
