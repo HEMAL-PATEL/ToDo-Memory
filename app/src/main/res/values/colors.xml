@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#1D1F21</color>
     <color name="colorPrimaryDark">#151718</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FF7043</color>
     <color name="navigationBar">#20000000</color>
     <color name="navigationBarTopDivider">#64ffffff</color>
     <color name="primaryText">#ffffff</color>
@@ -25,7 +25,7 @@
     <color name="light_primaryText">#424242</color>
     <color name="light_secondaryText">#757575</color>
     <color name="light_background">#EEEEEE</color>
-    <color name="light_importantIndicator">#F9A825</color>
+    <color name="light_importantIndicator">#FF9100</color>
     <color name="light_deleteBackground">#D32F2F</color>
     <color name="light_doneBackground">#09D261</color>
     <color name="light_reuseBackground">#1976D2</color>
