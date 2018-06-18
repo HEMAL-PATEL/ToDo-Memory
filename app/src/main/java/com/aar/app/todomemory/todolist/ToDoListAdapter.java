@@ -29,11 +29,11 @@ public class ToDoListAdapter extends ArrayListAdapter<ToDo, ToDoListAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(at(position));
+        holder.bind(at(position), mAlignment);
         super.onBindViewHolder(holder, position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         View layoutDelete;
         View layoutDone;
@@ -55,8 +55,8 @@ public class ToDoListAdapter extends ArrayListAdapter<ToDo, ToDoListAdapter.View
             viewImportant = itemView.findViewById(R.id.viewImportantIndicator);
         }
 
-        void bind(ToDo todo) {
-            textContent.setGravity(mAlignment);
+        void bind(ToDo todo, int textAlignment) {
+            textContent.setGravity(textAlignment);
             textContent.setText(todo.getContent());
             if (todo.isImportant()) {
                 viewImportant.setVisibility(View.VISIBLE);

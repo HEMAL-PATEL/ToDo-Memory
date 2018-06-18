@@ -29,8 +29,9 @@ public class HistoryListAdapter extends ArrayListAdapter<History, HistoryListAda
         super.onBindViewHolder(holder, position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm - dd/MMM/yyyy", Locale.US);
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private static final SimpleDateFormat DATE_FORMAT =
+                new SimpleDateFormat("HH:mm - dd/MMM/yyyy", Locale.US);
 
         View layoutDelete;
         View layoutDone;
