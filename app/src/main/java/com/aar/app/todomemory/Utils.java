@@ -1,12 +1,9 @@
 package com.aar.app.todomemory;
 
-import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-
-import java.util.List;
 
 public class Utils {
 

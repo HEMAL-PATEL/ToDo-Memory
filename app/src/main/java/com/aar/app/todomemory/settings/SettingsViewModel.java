@@ -5,11 +5,16 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.aar.app.todomemory.AutoLaunchServiceManager;
 import com.aar.app.todomemory.SingleLiveEvent;
+import com.aar.app.todomemory.data.ToDoDao;
+import com.aar.app.todomemory.data.ToDoDatabase;
 
 public class SettingsViewModel extends AndroidViewModel {
 
     private SettingsProvider mSettingsProvider;
+    private ToDoDao mToDoDao;
+    private AutoLaunchServiceManager mAutoLaunchServiceManager;
 
     private MutableLiveData<Boolean> mRemoveWhenDone = new MutableLiveData<>();
     private MutableLiveData<Boolean> mHistoryWhenDone = new MutableLiveData<>();
@@ -29,6 +34,9 @@ public class SettingsViewModel extends AndroidViewModel {
         mRunOnlyWhenToDoExist.setValue(mSettingsProvider.runOnlyWhenToDoExist());
         mTextAlignment.setValue(mSettingsProvider.textAlignment());
         mTodoOrder.setValue(mSettingsProvider.todoOrder());
+
+        mToDoDao = ToDoDatabase.getInstance(application).getToDoDao();
+        mAutoLaunchServiceManager = new AutoLaunchServiceManager(application);
     }
 
     public void setRemoveWhenDone(boolean enable) {
@@ -45,6 +53,15 @@ public class SettingsViewModel extends AndroidViewModel {
         if (!enable) {
             mSettingsProvider.setRunOnlyWhenToDoExist(false);
             mRunOnlyWhenToDoExist.setValue(false);
+
+            mAutoLaunchServiceManager.stop();
+        } else if (mSettingsProvider.runOnlyWhenToDoExist()) {
+            if (mToDoDao.getCount() > 0)
+                mAutoLaunchServiceManager.start();
+            else
+                mAutoLaunchServiceManager.stop();
+        } else {
+            mAutoLaunchServiceManager.start();
         }
         mRunWhenTurnOn.setValue(enable);
         mSettingsProvider.setRunWhenTurnOn(enable);
@@ -54,6 +71,15 @@ public class SettingsViewModel extends AndroidViewModel {
         if (mSettingsProvider.runWhenTurnOn()) {
             mRunOnlyWhenToDoExist.setValue(enable);
             mSettingsProvider.setRunOnlyWhenToDoExist(enable);
+
+            if (enable) {
+                if (mToDoDao.getCount() > 0)
+                    mAutoLaunchServiceManager.start();
+                else
+                    mAutoLaunchServiceManager.stop();
+            } else {
+                mAutoLaunchServiceManager.start();
+            }
         }
     }
 

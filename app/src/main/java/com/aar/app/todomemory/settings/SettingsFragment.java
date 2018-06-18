@@ -58,31 +58,10 @@ public class SettingsFragment extends Fragment {
         View themeDark = view.findViewById(R.id.textThemeDark);
         View themeLight = view.findViewById(R.id.textThemeLight);
 
-        switchRemove.setOnCheckedChangeListener((buttonView, isChecked) -> mViewModel.setRemoveWhenDone(isChecked));
-        switchHistory.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setHistoryWhenDone(isChecked)));
-        switchRunTurnOn.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setRunWhenTurnOn(isChecked)));
-        switchRunOnly.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setRunOnlyWhenToDoExist(isChecked)));
-        alignLeft.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_LEFT));
-        alignCenter.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_CENTER));
-        alignRight.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_RIGHT));
-        orderAsc.setOnClickListener(v -> mViewModel.setTodoOrder(SettingsProvider.ORDER_ASC));
-        orderDesc.setOnClickListener(v -> mViewModel.setTodoOrder(SettingsProvider.ORDER_DESC));
-        btnRateApp.setOnClickListener(this::onRateAppClick);
-        btnHelp.setOnClickListener(this::onHelpClick);
-        themeDark.setOnClickListener(v -> mViewModel.setTheme(SettingsProvider.THEME_DARK));
-        themeLight.setOnClickListener(v -> mViewModel.setTheme(SettingsProvider.THEME_LIGHT));
 
         mViewModel.getRemoveWhenDone().observe(this, enable -> switchRemove.setChecked(enable == null ? false : enable));
         mViewModel.getHistoryWhenDone().observe(this, enable -> switchHistory.setChecked(enable == null ? false : enable));
-        mViewModel.getRunWhenTurnOn().observe(this, enable -> {
-            enable = enable == null ? false : enable;
-            switchRunTurnOn.setChecked(enable);
-            if (enable) {
-                Utils.startPhoneScreenEventService(getActivity());
-            } else {
-                Utils.stopPhoneScreenEventService(getActivity());
-            }
-        });
+        mViewModel.getRunWhenTurnOn().observe(this, enable -> switchRunTurnOn.setChecked(enable == null ? false : enable));
         mViewModel.getRunOnlyWhenToDoExist().observe(this, enable -> switchRunOnly.setChecked(enable == null ? false : enable));
         mViewModel.getTextAlignment().observe(this, alignment -> {
             alignLeft.setBackgroundColor(Color.TRANSPARENT);
@@ -101,6 +80,21 @@ public class SettingsFragment extends Fragment {
             else if (order == SettingsProvider.ORDER_DESC) orderDesc.setBackgroundColor(highlightColor);
         });
         mViewModel.getOnThemeChanged().observe(this, this::onThemeChanged);
+
+
+        switchRemove.setOnCheckedChangeListener((buttonView, isChecked) -> mViewModel.setRemoveWhenDone(isChecked));
+        switchHistory.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setHistoryWhenDone(isChecked)));
+        switchRunTurnOn.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setRunWhenTurnOn(isChecked)));
+        switchRunOnly.setOnCheckedChangeListener(((buttonView, isChecked) -> mViewModel.setRunOnlyWhenToDoExist(isChecked)));
+        alignLeft.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_LEFT));
+        alignCenter.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_CENTER));
+        alignRight.setOnClickListener(v -> mViewModel.setTextAlignment(SettingsProvider.ALIGN_RIGHT));
+        orderAsc.setOnClickListener(v -> mViewModel.setTodoOrder(SettingsProvider.ORDER_ASC));
+        orderDesc.setOnClickListener(v -> mViewModel.setTodoOrder(SettingsProvider.ORDER_DESC));
+        btnRateApp.setOnClickListener(this::onRateAppClick);
+        btnHelp.setOnClickListener(this::onHelpClick);
+        themeDark.setOnClickListener(v -> mViewModel.setTheme(SettingsProvider.THEME_DARK));
+        themeLight.setOnClickListener(v -> mViewModel.setTheme(SettingsProvider.THEME_LIGHT));
     }
 
     private void onThemeChanged(int theme) {

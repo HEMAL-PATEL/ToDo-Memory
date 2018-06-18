@@ -64,7 +64,7 @@ public class SettingsProvider {
     }
 
     public boolean runWhenTurnOn() {
-        return mPref.getBoolean(KEY_RUN_WHEN_TURN_ON, false);
+        return mPref.getBoolean(KEY_RUN_WHEN_TURN_ON, true);
     }
 
     public void setRunWhenTurnOn(boolean enable) {
@@ -74,7 +74,7 @@ public class SettingsProvider {
     }
 
     public boolean runOnlyWhenToDoExist() {
-        return mPref.getBoolean(KEY_RUN_ONLY_TODO_EXIST, false);
+        return mPref.getBoolean(KEY_RUN_ONLY_TODO_EXIST, true);
     }
 
     public void setRunOnlyWhenToDoExist(boolean enable) {

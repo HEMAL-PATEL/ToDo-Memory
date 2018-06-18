@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.aar.app.todomemory.data.ToDoDatabase;
 import com.aar.app.todomemory.edittodo.ToDoEditorFragment;
 import com.aar.app.todomemory.history.HistoryFragment;
 import com.aar.app.todomemory.settings.SettingsFragment;
@@ -26,10 +25,6 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         setTheme(themeRes);
 
         setContentView(R.layout.activity_main);
-
-        if (settings.runWhenTurnOn()) {
-            Utils.startPhoneScreenEventService(this);
-        }
 
         mBottomNavigation = findViewById(R.id.bottomButtons);
 

@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Pair;
 
+import com.aar.app.todomemory.AutoLaunchServiceManager;
 import com.aar.app.todomemory.SingleLiveEvent;
 import com.aar.app.todomemory.data.HistoryDao;
 import com.aar.app.todomemory.data.ToDoDao;
@@ -24,9 +25,11 @@ public class ToDoListViewModel extends AndroidViewModel {
     private ToDoDao mToDoDao;
     private HistoryDao mHistoryDao;
     private SettingsProvider mSettingsProvider;
+    private AutoLaunchServiceManager mAutoLaunchServiceManager;
 
     private Pair<Integer, ToDo> mLastDeleted;
     private List<ToDo> mTodoList = new ArrayList<>();
+
     private MutableLiveData<List<ToDo>> mToDosLiveData = new MutableLiveData<>();
     private SingleLiveEvent<Integer> mOnToDoDeleted = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> mOnToDoDone = new SingleLiveEvent<>();
@@ -37,6 +40,7 @@ public class ToDoListViewModel extends AndroidViewModel {
         mToDoDao = ToDoDatabase.getInstance(application).getToDoDao();
         mHistoryDao = ToDoDatabase.getInstance(application).getHistoryDao();
         mSettingsProvider = SettingsProvider.getInstance(application);
+        mAutoLaunchServiceManager = new AutoLaunchServiceManager(application);
     }
 
     public void delete(int index) {
@@ -48,6 +52,10 @@ public class ToDoListViewModel extends AndroidViewModel {
 
         if (mTodoList.isEmpty()) {
             mToDosLiveData.setValue(mTodoList);
+
+            if (mSettingsProvider.runWhenTurnOn() && mSettingsProvider.runOnlyWhenToDoExist()) {
+                mAutoLaunchServiceManager.stop();
+            }
         }
     }
 
@@ -60,6 +68,10 @@ public class ToDoListViewModel extends AndroidViewModel {
             mTodoList.add(index, todo);
             mOnUndo.setValue(mLastDeleted);
             mLastDeleted = null;
+
+            if (mSettingsProvider.runWhenTurnOn()) {
+                mAutoLaunchServiceManager.start();
+            }
         }
     }
 
@@ -116,6 +128,18 @@ public class ToDoListViewModel extends AndroidViewModel {
         else
             mTodoList = mToDoDao.getAllDesc();
         mToDosLiveData.setValue(mTodoList);
+
+        if (mSettingsProvider.runWhenTurnOn()) {
+            if (mSettingsProvider.runOnlyWhenToDoExist()) {
+                if (mTodoList.isEmpty()) {
+                    mAutoLaunchServiceManager.stop();
+                } else {
+                    mAutoLaunchServiceManager.start();
+                }
+            } else {
+                mAutoLaunchServiceManager.start();
+            }
+        }
     }
 
     private boolean isIndexValid(int index) {

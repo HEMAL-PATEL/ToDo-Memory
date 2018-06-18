@@ -6,10 +6,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
-import android.util.Log;
-
-import com.aar.app.todomemory.data.ToDoDatabase;
-import com.aar.app.todomemory.settings.SettingsProvider;
 
 public class PhoneScreenService extends Service {
 
@@ -52,14 +48,7 @@ public class PhoneScreenService extends Service {
             boolean screenOn = intent.getBooleanExtra(PhoneScreenEventReceiver.EXTRA_SCREEN_STATE, false);
 
             if (!screenOn) {
-                // bad code
-                if (SettingsProvider.getInstance(getApplication()).runOnlyWhenToDoExist()) {
-                    if (ToDoDatabase.getInstance(getApplication()).getToDoDao().getCount() > 0) {
-                        runMainActivity();
-                    }
-                } else {
-                    runMainActivity();
-                }
+                runMainActivity();
             }
         }
     }
