@@ -2,6 +2,7 @@ package com.aar.app.todomemory.settings;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
@@ -54,23 +55,23 @@ public class SettingsViewModel extends AndroidViewModel {
         }
     }
 
-    public MutableLiveData<Boolean> getRemoveWhenDone() {
+    public LiveData<Boolean> getRemoveWhenDone() {
         return mRemoveWhenDone;
     }
 
-    public MutableLiveData<Boolean> getHistoryWhenDone() {
+    public LiveData<Boolean> getHistoryWhenDone() {
         return mHistoryWhenDone;
     }
 
-    public MutableLiveData<Integer> getTextAlignment() {
+    public LiveData<Integer> getTextAlignment() {
         return mTextAlignment;
     }
 
-    public MutableLiveData<Integer> getTodoOrder() {
+    public LiveData<Integer> getTodoOrder() {
         return mTodoOrder;
     }
 
-    public MutableLiveData<Integer> getOnThemeChanged() {
+    public LiveData<Integer> getOnThemeChanged() {
         return mOnThemeChanged;
     }
 }
