@@ -1,7 +1,6 @@
 package com.aar.app.todomemory.todolist;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -128,13 +127,15 @@ public class ToDoListFragment extends Fragment {
     }
 
     private void onNotifyMeEnableState(Boolean enabled) {
+        int color;
         if (enabled) {
-            int color = Utils.getColorThemeAttribute(getContext(), R.attr.colorAccent);
+            color = Utils.getColorThemeAttribute(getContext(), R.attr.colorAccent);
             notifyMeButton.setImageResource(R.drawable.ic_notifications);
-            notifyMeButton.getDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
         } else {
+            color = Utils.getColorThemeAttribute(getContext(), R.attr.primaryText);
             notifyMeButton.setImageResource(R.drawable.ic_notifications_none);
         }
+        notifyMeButton.setColorFilter(color);
     }
 
     private void initBottomButtons(View view) {
